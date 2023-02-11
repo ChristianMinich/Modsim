@@ -1,0 +1,6 @@
+PATH FOR OSM
+C:\Users\chris\Desktop\despgutils/berlin-latest.osm.pbf
+PATH FOR GRAPHHOPPER JAR
+C:\Users\chris\Desktop\despgutils\graphhopper-web-6.0.jar
+COMMAND FOR SERVER START
+java -jar C:\Users\chris\Desktop\despgutils\graphhopper-web-6.0.jar server C:\Users\chris\Desktop\despgutils\config.yml
