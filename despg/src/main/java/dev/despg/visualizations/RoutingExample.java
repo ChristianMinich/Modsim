@@ -22,6 +22,7 @@ public class RoutingExample {
     public static void main(String[] args) {
         String relDir = args.length == 1 ? args[0] : "";
         GraphHopper hopper = createGraphHopperInstance(relDir + "C:/Users/chris/Desktop/despgutils/berlin-latest.osm.pbf");
+        createTruckProfile();
         routing(hopper);
         speedModeVersusFlexibleMode(hopper);
         headingAndAlternativeRoute(hopper);
@@ -117,7 +118,7 @@ public class RoutingExample {
     }
     
     public static void createTruckProfile() {
-    	CustomProfile truck = new CustomProfile("truck")
+    	Profile truck = new CustomProfile("truck")
     			.setVehicle("truck")
     			.setWeighting("shortest")
     			.setTurnCosts(false);
