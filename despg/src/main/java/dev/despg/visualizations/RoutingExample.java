@@ -115,6 +115,13 @@ public class RoutingExample {
         assert res.getAll().size() == 2;
         assert Helper.round(res.getBest().getDistance(), -2) == 2200;
     }
+    
+    public static void createTruckProfile() {
+    	CustomProfile truck = new CustomProfile("truck")
+    			.setVehicle("truck")
+    			.setWeighting("shortest")
+    			.setTurnCosts(false);
+    }
 
     /**
      * To customize profiles in the config.yml file you can use a json or yml file or embed it directly. See this list:
