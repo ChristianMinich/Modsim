@@ -23,10 +23,10 @@ public class RoutingExample {
         String relDir = args.length == 1 ? args[0] : "";
         GraphHopper hopper = createGraphHopperInstance(relDir + "C:/Users/chris/Desktop/despgutils/berlin-latest.osm.pbf");
         createTruckProfile();
-        routing(hopper);
+       /* routing(hopper);
         speedModeVersusFlexibleMode(hopper);
         headingAndAlternativeRoute(hopper);
-        customizableRouting(relDir + "C:/Users/chris/Desktop/despgutils/berlin-latest.osm.pbf");
+        customizableRouting(relDir + "C:/Users/chris/Desktop/despgutils/berlin-latest.osm.pbf"); */
 
         // release resources to properly shutdown or start a new instance
         hopper.close();

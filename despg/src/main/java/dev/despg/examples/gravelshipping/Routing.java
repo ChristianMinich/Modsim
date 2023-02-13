@@ -40,7 +40,7 @@ public class Routing {
 	 * @return {@link GraphHopper}
 	 */
 	public static GraphHopper createGraphHopperInstance(String relDir, String ghLoc) {
-		GraphHopper hopper = new GraphHopper();
+		GraphHopper hopper = new GraphHopper().
         hopper.setOSMFile(ghLoc);
         // specify where to store graphhopper files
         hopper.setGraphHopperLocation("target/routing-graph-cache");
