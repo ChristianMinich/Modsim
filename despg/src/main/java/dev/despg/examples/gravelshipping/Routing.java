@@ -29,6 +29,7 @@ public class Routing {
 	
 	public Routing(String[] args) {
 		String relDir = args.length == 1 ? args[0] : "";
+		GraphHopper hopper = createGraphHopperInstance(relDir, ghLoc);
 	}
 	// File Path
 	private String ghLoc = "C:/Users/chris/Desktop/despgutils/berlin-latest.osm.pbf";
