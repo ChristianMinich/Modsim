@@ -6,7 +6,7 @@
  *
  * see LICENSE
  * 
- *@author Christian Minich
+ * @author Christian Minich
  */
 package dev.despg.examples.gravelshipping;
 
