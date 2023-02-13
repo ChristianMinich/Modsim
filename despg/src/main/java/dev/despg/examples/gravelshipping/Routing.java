@@ -34,7 +34,7 @@ public class Routing {
 	private String ghLoc = "C:/Users/chris/Desktop/despgutils/berlin-latest.osm.pbf";
 	
 	/**
-	 * This method creates an Instance of the GraphHopper Class and returns it.
+	 * This method creates an Instance of the GraphHopper Class and returns it. ASDA
 	 * @param relDir - Addition of Run Configuration Arguments 
 	 * @param ghLoc - File Location of the Openstreetmap pbf File
 	 * @return {@link GraphHopper}
