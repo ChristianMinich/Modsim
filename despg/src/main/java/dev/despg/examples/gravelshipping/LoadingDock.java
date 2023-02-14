@@ -51,6 +51,7 @@ public class LoadingDock extends SimulationObject
 		loadingTime.addProbInt(0.8, 120);
 		loadingTime.addProbInt(1.0, 180);
 
+		//TODO Replace with Shipment
 		drivingToWeighingStation = new Randomizer();
 		drivingToWeighingStation.addProbInt(0.5, 30);
 		drivingToWeighingStation.addProbInt(0.78, 45);
