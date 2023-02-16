@@ -10,90 +10,74 @@
  */
 package dev.despg.examples.gravelshipping;
 
-import java.util.Locale;
-
 import com.graphhopper.GHRequest;
 import com.graphhopper.GHResponse;
 import com.graphhopper.GraphHopper;
 import com.graphhopper.ResponsePath;
 import com.graphhopper.config.CHProfile;
+import com.graphhopper.config.LMProfile;
 import com.graphhopper.config.Profile;
-import com.graphhopper.util.Instruction;
-import com.graphhopper.util.InstructionList;
-import com.graphhopper.util.PointList;
-import com.graphhopper.util.Translation;
+import com.graphhopper.routing.ev.MaxHeight;
+import com.graphhopper.routing.weighting.custom.CustomProfile;
+import com.graphhopper.util.*;
+import com.graphhopper.util.shapes.GHPoint;
+
+import java.util.Arrays;
+import java.util.Locale;
+
+import static com.graphhopper.json.Statement.If;
+import static com.graphhopper.json.Statement.Op.LIMIT;
+import static com.graphhopper.json.Statement.Op.MULTIPLY;
 
 public class Routing {
-	
-	private String relDir;
-	//private String test /RENE Stinkt;
-	
-	public Routing(String[] args) {
-		String relDir = args.length == 1 ? args[0] : "";
-		GraphHopper hopper = createGraphHopperInstance(relDir, ghLoc);
-	}
-	// File Path
-	private String ghLoc = "C:/Users/chris/Desktop/despgutils/berlin-latest.osm.pbf";
-	
-	/**
-	 * This method creates an Instance of the GraphHopper Class and returns it. ASDA
-	 * @param relDir - Addition of Run Configuration Arguments 
-	 * @param ghLoc - File Location of the Openstreetmap pbf File
-	 * @return {@link GraphHopper}
-	 */
-	public static GraphHopper createGraphHopperInstance(String relDir, String ghLoc) {
+	public static void customizableRouting(double fromLat, double fromLon, double toLat, double toLo) {
 		GraphHopper hopper = new GraphHopper();
-        hopper.setOSMFile(ghLoc);
-        // specify where to store graphhopper files
-        hopper.setGraphHopperLocation("target/routing-graph-cache");
+		//hopper.setOSMFile("" + "C:/Users/andre/Documents/GitHub/Modsim/despg/src/despgutils/germany-latest.osm.pbf");
+		hopper.setOSMFile("src/despgutils/germany-latest.osm.pbf");
+		hopper.setGraphHopperLocation("target/routing-custom-graph-cache");
+		hopper.setProfiles(new CustomProfile("car_custom").setCustomModel(new CustomModel()).setVehicle("car"));
 
-        // see docs/core/profiles.md to learn more about profiles
-        hopper.setProfiles(new Profile("car").setVehicle("car").setWeighting("fastest").setTurnCosts(false));
+		hopper.getLMPreparationHandler().setLMProfiles(new LMProfile("car_custom"));
+		hopper.importOrLoad();
 
-        // this enables speed mode for the profile we called car
-        hopper.getCHPreparationHandler().setCHProfiles(new CHProfile("car"));
+		GHRequest req = new GHRequest().setProfile("car_custom").
+				addPoint(new GHPoint(fromLat, fromLon)).addPoint(new GHPoint(toLat, toLo));
 
-        // now this can take minutes if it imports or a few seconds for loading of course this is dependent on the area you import
-        hopper.importOrLoad();
-        return hopper;
-	}
-	
-	/**
-	 * This method calculates the approximate Distance and
-	 * Time that is needed to travel from the Start to the End.
-	 * @param hopper - {@link GraphHopper}
-	 * @param fromLat - Start Latitude
-	 * @param fromLon - Start Longitude
-	 * @param toLat - End Latitude
-	 * @param toLon - End Longitude
-	 */
-	public static void routingCalc(GraphHopper hopper, double fromLat, double fromLon, double toLat, double toLon) {
-		//TODO Return Type
-		GHRequest req = new GHRequest(fromLat, fromLon, toLat, toLon)
-                        .setProfile("car")
-                        .setLocale(Locale.US);
-        GHResponse rsp = hopper.route(req);
+		GHResponse res = hopper.route(req);
+		if (res.hasErrors())
+			throw new RuntimeException(res.getErrors().toString());
 
-        if (rsp.hasErrors())
-            throw new RuntimeException(rsp.getErrors().toString());
+		assert Math.round(res.getBest().getTime() / 1000d) == 96;
 
-        ResponsePath path = rsp.getBest();
+		// 2. now avoid primary roads and reduce maximum speed, see docs/core/custom-models.md for an in-depth explanation
+		// and also the blog posts https://www.graphhopper.com/?s=customizable+routing
 
-        // points, distance in meters and time in millis of the full path
-        PointList pointList = path.getPoints();
-        double distance = path.getDistance();
-        long timeInMs = path.getTime();
+		CustomModel model = new CustomModel();
+		model.addToPriority(If("road_class == PRIMARY", MULTIPLY, "0.5"));
 
-        Translation tr = hopper.getTranslationMap().getWithFallBack(Locale.UK);
-        InstructionList il = path.getInstructions();
-        // iterate over all turn instructions
-        for (Instruction instruction : il) {
-            System.out.println("distance " + instruction.getDistance() + " for instruction: " + instruction.getTurnDescription(tr));
-        }
-        
-        
-        //TODO Custom Profile Implementation
-        //TODO SERVER Connection
-        //TODO Connection to GravelShipping
-	}
-}
+		// unconditional limit to 100km/h
+		model.addToPriority(If("true", LIMIT, "100"));
+
+		req.setCustomModel(model);
+		res = hopper.route(req);
+		if (res.hasErrors())
+			throw new RuntimeException(res.getErrors().toString());
+
+		assert Math.round(res.getBest().getTime() / 1000d) == 165;
+
+		ResponsePath path = res.getBest();
+
+		PointList pointList = path.getPoints();
+		double distance = path.getDistance();
+		long timeInMs = path.getTime();
+
+		System.out.println(distance + " " + (((timeInMs / 1000) / 60)) + " Time in Minutes");
+		Translation tr = hopper.getTranslationMap().getWithFallBack(Locale.ENGLISH);
+
+		InstructionList il = path.getInstructions();
+		// iterate over all turn instructions
+		for (Instruction instruction : il) {
+			System.out.println("distance " + Math.round(instruction.getDistance()) + 
+					" for instruction: " + instruction.getName() + " " + instruction.getTurnDescription(tr) + " Time: " + (instruction.getTime() / 1000) + " seconds");
+		}
+	}}

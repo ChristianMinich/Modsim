@@ -72,6 +72,8 @@ public class GravelShipping extends Simulation
 				String.format("Unsuccessfull loadings\t = %d(%.2f%%), mean size %.2ft", unsuccessfulLoadings,
 						(double) unsuccessfulLoadings / (successfulLoadings + unsuccessfulLoadings) * 100,
 						(double) unsuccessfulLoadingSizes / unsuccessfulLoadings));
+		
+		Routing.customizableRouting(52.677722,7.294407, 52.517879,7.321728);
 	}
 
 	/**
