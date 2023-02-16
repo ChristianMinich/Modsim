@@ -26,6 +26,7 @@ import com.graphhopper.util.Translation;
 public class Routing {
 	
 	private String relDir;
+	//private String test;
 	
 	public Routing(String[] args) {
 		String relDir = args.length == 1 ? args[0] : "";
