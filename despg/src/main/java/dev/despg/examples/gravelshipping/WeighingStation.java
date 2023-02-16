@@ -38,6 +38,7 @@ public final class WeighingStation extends SimulationObject
 
 		eventQueue = EventQueue.getInstance();
 
+		//TODO Replace with Shipment
 		drivingToLoadingDock = new Randomizer();
 		drivingToLoadingDock.addProbInt(0.5, 120);
 		drivingToLoadingDock.addProbInt(0.8, 150);
