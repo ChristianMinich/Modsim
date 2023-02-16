@@ -20,7 +20,7 @@ calculation, mobile navigation and more. GraphHopper uses OpenStreetMap and GTFS
 import other data sources too.
 
 ## Installation
-- Follow the Link https://download.geofabrik.de/europe.html to download the newest osm.pbf File of your desired Location<br>
+- Follow the Link https://download.geofabrik.de/index.html to download the newest osm.pbf File of your desired Location<br>
 - Replace the File Path inside the Class Routing.java to your Local File Path.
 ````
 hopper.setOSMFile("" + "your_local_file_path.osm.pbf");
