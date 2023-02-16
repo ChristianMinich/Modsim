@@ -20,6 +20,7 @@ calculation, mobile navigation and more. GraphHopper uses OpenStreetMap and GTFS
 import other data sources too.
 
 ## Installation
+- Make sure to use at least Java 8 and higher.
 - Follow the Link https://download.geofabrik.de/index.html to download the newest osm.pbf File of your desired Location<br>
 - Replace the File Path inside the Class Routing.java to your Local File Path.
 ````
@@ -32,3 +33,8 @@ hopper.setOSMFile("" + "your_local_file_path.osm.pbf");
 ```java
 -Xmx5g -Xms5g
 ```
+
+### Library
+- Follow the Link to download the [GraphHopper Jar](https://github.com/graphhopper/graphhopper/releases/download/6.0/graphhopper-web-6.0.jar) 
+- Create a new User Library inside your Java Project
+- Add to User Library to your Java Project
