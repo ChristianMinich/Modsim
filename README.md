@@ -38,3 +38,12 @@ hopper.setOSMFile("" + "your_local_file_path.osm.pbf");
 - Follow the Link to download the [GraphHopper Jar](https://github.com/graphhopper/graphhopper/releases/download/6.0/graphhopper-web-6.0.jar) 
 - Create a new User Library inside your Java Project
 - Add the User Library to your Java Project
+
+
+## Server - Setup
+- To Start the Server use the following Command
+- Disclaimer, when first executing it may take a while until the Map is fully loaded.
+- Download the config.yml insert your Local File Path.
+```
+java -Xmx5g -Xms5g -jar your_local_file_path_of_the_graphhopper.jar server your_local_file_path_of_the_config.yml
+```
