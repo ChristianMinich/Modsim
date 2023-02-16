@@ -29,18 +29,19 @@ public class Routing {
 	
 	public Routing(String[] args) {
 		String relDir = args.length == 1 ? args[0] : "";
+		GraphHopper hopper = createGraphHopperInstance(relDir, ghLoc);
 	}
 	// File Path
 	private String ghLoc = "C:/Users/chris/Desktop/despgutils/berlin-latest.osm.pbf";
 	
 	/**
-	 * This method creates an Instance of the GraphHopper Class and returns it.
+	 * This method creates an Instance of the GraphHopper Class and returns it. ASDA
 	 * @param relDir - Addition of Run Configuration Arguments 
 	 * @param ghLoc - File Location of the Openstreetmap pbf File
 	 * @return {@link GraphHopper}
 	 */
 	public static GraphHopper createGraphHopperInstance(String relDir, String ghLoc) {
-		GraphHopper hopper = new GraphHopper().
+		GraphHopper hopper = new GraphHopper();
         hopper.setOSMFile(ghLoc);
         // specify where to store graphhopper files
         hopper.setGraphHopperLocation("target/routing-graph-cache");
