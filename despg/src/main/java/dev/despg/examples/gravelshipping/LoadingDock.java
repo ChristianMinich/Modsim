@@ -17,6 +17,7 @@ import dev.despg.core.SimulationObjects;
 
 public class LoadingDock extends SimulationObject
 {
+	//Testneu
 	private String name;
 	private Truck truckCurrentlyLoaded;
 	private Boolean dockFailed = false;
