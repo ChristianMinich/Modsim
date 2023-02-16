@@ -26,7 +26,7 @@ import com.graphhopper.util.Translation;
 public class Routing {
 	
 	private String relDir;
-	//private String test;
+	//private String test /RENE Stinkt;
 	
 	public Routing(String[] args) {
 		String relDir = args.length == 1 ? args[0] : "";
