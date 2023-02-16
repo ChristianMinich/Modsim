@@ -94,7 +94,6 @@ public class LoadingDock extends SimulationObject
 	@Override
 	public boolean simulate(long timeStep)
 	{
-		//Test
 		if (dockFailed){
 			Event event = eventQueue.getNextEvent(timeStep, true, GravelLoadingEventTypes.DockRepaired, null, this);
 			if (event != null){
