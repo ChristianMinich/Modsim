@@ -1,6 +1,6 @@
 # Despg Extension using GraphHopper for Route Calculation
 
-## Despg
+## [Despg](https://despg.dev)
 Discrete Event Simulation Playground<br>
 <br>
 [This project is licensed under the Eclipse Public License 2.0.](https://gitlab.com/lobequadrat/despg/-/blob/main/LICENSE)<br>
@@ -18,3 +18,17 @@ Java library or standalone web server to calculate the distance, time, turn-by-t
 attributes for a route between two or more points. Beyond this "A-to-B" routing it supports "snap to road", Isochrone <br>
 calculation, mobile navigation and more. GraphHopper uses OpenStreetMap and GTFS data by default and it can <br>
 import other data sources too.
+
+## Installation
+- Follow the Link https://download.geofabrik.de/europe.html to download the newest osm.pbf File of your desired Location<br>
+- Replace the File Path inside the Class Routing.java to your Local File Path.
+````
+hopper.setOSMFile("" + "your_local_file_path.osm.pbf");
+````
+ 
+### VM - Arguments
+- Use at least 5Gb RAM
+- Disclaimer, when first executing it may take a while until the Map is fully loaded.
+```java
+-Xmx5g -Xms5g
+```
