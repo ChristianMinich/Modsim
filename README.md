@@ -37,4 +37,4 @@ hopper.setOSMFile("" + "your_local_file_path.osm.pbf");
 ### Library
 - Follow the Link to download the [GraphHopper Jar](https://github.com/graphhopper/graphhopper/releases/download/6.0/graphhopper-web-6.0.jar) 
 - Create a new User Library inside your Java Project
-- Add to User Library to your Java Project
+- Add the User Library to your Java Project
