@@ -26,7 +26,11 @@ public enum GravelLoadingEventTypes implements UniqueEventDescription
 	/** */
 	WeighingDone("Weighing Truck done"),
 	/** */
-	DockRepaired("Repairing Truck done");
+	DockRepaired("Repairing Truck done"),
+	/** */
+	Unloading("Unloading Truck"),
+	/** */
+	UnloadingDone("Unloading Truck done");
 
 	private String eventTypeUniqueDescription;
 
