@@ -1,6 +1,6 @@
 # Despg Extension using GraphHopper for Route Calculation
 
-## [Despg](https://despg.dev)
+## [Despg](https://gitlab.com/lobequadrat/despg)
 Discrete Event Simulation Playground<br>
 <br>
 [This project is licensed under the Eclipse Public License 2.0.](https://gitlab.com/lobequadrat/despg/-/blob/main/LICENSE)<br>
