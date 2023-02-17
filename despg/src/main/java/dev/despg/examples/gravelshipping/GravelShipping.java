@@ -9,6 +9,7 @@
  */
 package dev.despg.examples.gravelshipping;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,6 +35,9 @@ public class GravelShipping extends Simulation
 	private static final int NUM_TRUCKS = 2;
 	private static final int NUM_LOADING_DOCKS = 3;
 	private static final int NUM_WEIGHING_STATIONS = 2;
+	
+	//private static ArrayList<Double> LOADING_DOCK_LOCATION = Reader.loadCoordinates(null);
+	//private static ArrayList<Double> WEIGHING_LOCATION = Reader.loadCoordinates(null);
 
 	/**
 	 * Defines the setup of simulation objects and starting events before executing
