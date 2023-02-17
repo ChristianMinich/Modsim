@@ -55,7 +55,7 @@ public class GravelShipping extends Simulation
 			eventqueue.add(new Event(0L, GravelLoadingEventTypes.Loading, new Truck("T" + i), LoadingDock.class, null));
 
 		for (int i = 0; i < NUM_LOADING_DOCKS; i++)
-			new LoadingDock("LD" + i);
+			new LoadingDock("LD" + i, LOADING_DOCK_LOCATION.get(i - 1).latitude, LOADING_DOCK_LOCATION.get(i - 1).longitude);
 
 		for (int i = 0; i < NUM_WEIGHING_STATIONS; i++)
 			new WeighingStation("WS" + i);
