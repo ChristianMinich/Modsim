@@ -36,8 +36,8 @@ public class GravelShipping extends Simulation
 	private static final int NUM_LOADING_DOCKS = 3;
 	private static final int NUM_WEIGHING_STATIONS = 2;
 	
-	//private static ArrayList<Double> LOADING_DOCK_LOCATION = Reader.loadCoordinates(null);
-	//private static ArrayList<Double> WEIGHING_LOCATION = Reader.loadCoordinates(null);
+	//private static ArrayList<Long> LOADING_DOCK_LOCATION = Reader.loadCoordinates(null);
+	//private static ArrayList<Long> WEIGHING_LOCATION = Reader.loadCoordinates(null);
 
 	/**
 	 * Defines the setup of simulation objects and starting events before executing
@@ -55,10 +55,10 @@ public class GravelShipping extends Simulation
 			eventqueue.add(new Event(0L, GravelLoadingEventTypes.Loading, new Truck("T" + i), LoadingDock.class, null));
 
 		for (int i = 0; i < NUM_LOADING_DOCKS; i++)
-			new LoadingDock("LD" + i, LOADING_DOCK_LOCATION.get(i - 1).latitude, LOADING_DOCK_LOCATION.get(i - 1).longitude);
+			new LoadingDock("LD" + i, LOADING_DOCK_LOCATION.get(i).latitude, LOADING_DOCK_LOCATION.get(i).longitude);
 
 		for (int i = 0; i < NUM_WEIGHING_STATIONS; i++)
-			new WeighingStation("WS" + i);
+			new WeighingStation("WS" + i, WEIGHING_LOCATION.get(i).latitude, WEIGHING_LOCATION.get(i).longitude);
 
 		GravelShipping gs = new GravelShipping();
 		long timeStep = gs.simulate();
