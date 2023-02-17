@@ -21,7 +21,7 @@ import other data sources too.
 
 ## Installation
 - Make sure to use at least Java 8 and higher.
-- Follow the Link https://download.geofabrik.de/index.html to download the newest osm.pbf File of your desired Location<br>
+- Follow the Link https://download.geofabrik.de/europe.html to download the newest osm.pbf File of your Germany<br>
 - Replace the File Path inside the Class Routing.java to your Local File Path.
 ````
 hopper.setOSMFile("" + "your_local_file_path.osm.pbf");
