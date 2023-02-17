@@ -1,15 +1,15 @@
 package dev.despg.examples.gravelshipping;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
+//import java.io.File;
+//import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.lang.reflect.Array;
+//import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+//import java.util.List;
+//import java.util.Scanner;
 
-public class Reader {
+/*public class Reader {
 
 	// NOT FINAL
 	private static final String COMMA_DELIMITER = ",";
@@ -35,4 +35,22 @@ public class Reader {
 		}
 		return values;
 	}
+}*/
+
+public class Reader {
+    public static void main(String[] args) {
+        ArrayList<String> values = new ArrayList<String>();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("src/despgutils/Routes.csv"));
+            String line;
+            while ((line = br.readLine()) != null) {
+                values.add(line);
+            }
+            br.close();
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+        System.out.println(values);
+        System.out.println(values.get(2).);
+    }
 }
