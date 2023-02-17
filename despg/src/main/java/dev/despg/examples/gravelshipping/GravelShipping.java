@@ -34,6 +34,12 @@ public class GravelShipping extends Simulation
 
 	private static Integer unsuccessfulLoadings = 0;
 	private static Integer unsuccessfulLoadingSizes = 0;
+	
+	private static Integer successfulUnloadings = 0;
+    private static Integer successfulUnloadingSizes = 0;
+
+    private static Integer unsuccessfulUnloadings = 0;
+    private static Integer unsuccessfulUnloadingSizes = 0;
 
 	private static final int NUM_TRUCKS = 2;
 	private static final int NUM_LOADING_DOCKS = 3;
@@ -62,7 +68,7 @@ public class GravelShipping extends Simulation
 			new LoadingDock("LD " + LOADING_DOCK_LOCATION.get(i).getName(), LOADING_DOCK_LOCATION.get(i).getLatitude(), LOADING_DOCK_LOCATION.get(i).getLongitude());
 
 		for (int i = 0; i < NUM_WEIGHING_STATIONS; i++)
-			new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude());
+			new WeighingStation("WS " + WEIGHING_LOCATION.get(i+3).getName(), WEIGHING_LOCATION.get(i+3).getLatitude(), WEIGHING_LOCATION.get(i+3).getLongitude());
 
 		GravelShipping gs = new GravelShipping();
 		long timeStep = gs.simulate();
@@ -80,6 +86,7 @@ public class GravelShipping extends Simulation
 				String.format("Unsuccessfull loadings\t = %d(%.2f%%), mean size %.2ft", unsuccessfulLoadings,
 						(double) unsuccessfulLoadings / (successfulLoadings + unsuccessfulLoadings) * 100,
 						(double) unsuccessfulLoadingSizes / unsuccessfulLoadings));
+		logger.log(Level.INFO,successfulUnloadings.toString());
 		
 		Routing.customizableRouting(52.677722,7.294407, 52.517879,7.321728);
 	}
@@ -95,12 +102,12 @@ public class GravelShipping extends Simulation
 
 		int numberOfTrucksLoadingQueue = EventQueue.getInstance().countEvents(timeStep, true, GravelLoadingEventTypes.Loading, null, null);
 		int numberOfTrucksWeighingQueue = EventQueue.getInstance().countEvents(timeStep, true, GravelLoadingEventTypes.Weighing, null, null);
-
+		int numberOfTrucksUnloadingQueue = EventQueue.getInstance().countEvents(timeStep, true, GravelLoadingEventTypes.Unloading, null, null);
 		String shipped = String.format("shipped/toShip : %dt(%.2f%%) / %dt", gravelShipped,
 				(double) gravelShipped / gravelToShippedFinal * 100, gravelToShip);
 
 		logger.log(Level.INFO, time + " " + shipped + "\n " + eventQueue
-				+ " #Trucks Loading Queue: " + numberOfTrucksLoadingQueue + ", # Trucks Weighing Queue: " + numberOfTrucksWeighingQueue);
+				+ " #Trucks Loading Queue: " + numberOfTrucksLoadingQueue + ", # Trucks Weighing Queue: " + numberOfTrucksWeighingQueue + " ," + numberOfTrucksUnloadingQueue);
 	}
 
 	public static Integer getGravelToShip()
@@ -141,5 +148,9 @@ public class GravelShipping extends Simulation
 	public static void increaseUnsuccessfulLoadingSizes(Integer unsuccessfulLoadingSizes)
 	{
 		GravelShipping.unsuccessfulLoadingSizes += unsuccessfulLoadingSizes;
+	}
+	public static void increaseSuccessfulUnloadings()
+	{
+		successfulUnloadings++;
 	}
 }

@@ -95,7 +95,7 @@ public class Shipment extends SimulationObject{
 				LoadingDock ld = (LoadingDock) nextLoadingDock;
 				
 				drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, ld.getLatitude(), ld.getLongitude());
-				
+				GravelShipping.increaseSuccessfulUnloadings();
 				eventQueue.add(new Event(
 						timeStep + event.getObjectAttached().addUtilization(drivingToLoadingDock),
 						GravelLoadingEventTypes.Unloading, truckCurrentlyLoaded, LoadingDock.class, null));

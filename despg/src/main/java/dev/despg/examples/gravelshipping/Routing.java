@@ -76,10 +76,10 @@ public class Routing {
 
 		InstructionList il = path.getInstructions();
 		// iterate over all turn instructions
-		for (Instruction instruction : il) {
+		/*for (Instruction instruction : il) {
 			System.out.println("distance " + Math.round(instruction.getDistance()) + 
 					" for instruction: " + instruction.getName() + " " + instruction.getTurnDescription(tr) + " Time: " + (instruction.getTime() / 1000) + " seconds");
-		}
+		}*/
 		hopper.close();
 		return ((timeInMs / 1000) / 60); // Conversion from Ms to Minutes.
 	}}
