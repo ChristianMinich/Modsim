@@ -80,4 +80,5 @@ public class Routing {
 			System.out.println("distance " + Math.round(instruction.getDistance()) + 
 					" for instruction: " + instruction.getName() + " " + instruction.getTurnDescription(tr) + " Time: " + (instruction.getTime() / 1000) + " seconds");
 		}
+		hopper.close();
 	}}
