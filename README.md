@@ -26,6 +26,10 @@ import other data sources too.
 ````
 hopper.setOSMFile("" + "your_local_file_path.osm.pbf");
 ````
+- Replace the Cache File Path inside the Class Routing.java to your Local Cache File Path.
+```
+hopper.setGraphHopperLocation("target/routing-custom-graph-cache");
+```
  
 ### VM - Arguments
 - Use at least 5Gb RAM
