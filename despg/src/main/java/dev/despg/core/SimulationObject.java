@@ -16,8 +16,8 @@ package dev.despg.core;
  */
 public abstract class SimulationObject
 {
-	private Long Longitude;
-	private Long Latitude;
+	private Long longitude;
+	private Long latitude;
 	private Long timeUtilized = 0L;
 	private Long utilStart;
 
@@ -87,5 +87,21 @@ public abstract class SimulationObject
 	{
 		timeUtilized += timeUtilizedDelta;
 		return timeUtilizedDelta;
+	}
+
+	private Long getLongitude() {
+		return longitude;
+	}
+
+	private void setLongitude(Long longitude) {
+		this.longitude = longitude;
+	}
+
+	private Long getLatitude() {
+		return latitude;
+	}
+
+	private void setLatitude(Long latitude) {
+		this.latitude = latitude;
 	}
 }
