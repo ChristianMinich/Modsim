@@ -46,14 +46,13 @@ hopper.setGraphHopperLocation("your_cache_path");
 
 ## Server - Setup
 - Disclaimer, when first executing it may take a while until the Map is fully loaded.
-- Download the config.yml insert your Local File Path.
-- Change the config.yml Parameter datareader.file to your_local_file_path.osm.pbf.
-- Change the graph.location to the sub_region you downloaded.
+- Download the [config.yml](Modsim/despg/src/despgutils/config.yml) insert your Local File Path.
+- Change the [config.yml](Modsim/despg/src/despgutils/config.yml) Parameter datareader.file to your_local_file_path.osm.pbf.
 ```
 graphhopper:
  
   datareader.file: your_local_file_path.osm.pbf
-  graph.location: sub_region-gh
+  graph.location: germany-gh
 ```
 - To Start the Server use the following Command
 ```
