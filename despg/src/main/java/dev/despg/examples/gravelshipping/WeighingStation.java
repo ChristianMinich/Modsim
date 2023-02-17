@@ -32,9 +32,12 @@ public final class WeighingStation extends SimulationObject
 	 *
 	 * @param name Name of the WeightingStation instance
 	 */
-	public WeighingStation(String name)
+	public WeighingStation(String name, Double latitude, Double longitude)
 	{
 		this.name = name;
+		
+		this.latitude = latitude;
+		this.longitude = longitude;
 
 		eventQueue = EventQueue.getInstance();
 

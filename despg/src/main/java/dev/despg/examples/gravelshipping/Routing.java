@@ -53,7 +53,7 @@ public class Routing {
 		// and also the blog posts https://www.graphhopper.com/?s=customizable+routing
 
 		CustomModel model = new CustomModel();
-		model.addToPriority(If("road_class == PRIMARY", MULTIPLY, "0.5"));
+		model.addToPriority(If("road_class == PRIMARY", MULTIPLY, "0.9"));
 
 		// unconditional limit to 100km/h
 		model.addToPriority(If("true", LIMIT, "100"));

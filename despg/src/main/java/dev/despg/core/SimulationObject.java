@@ -1,4 +1,5 @@
 /**
+
  * Copyright (C) 2021 despg.dev, Ralf Buschermöhle
  *
  * DESPG is made available under the terms of the Eclipse Public License 2.0
@@ -16,6 +17,8 @@ package dev.despg.core;
  */
 public abstract class SimulationObject
 {
+	protected Double latitude;
+	protected Double longitude;
 	private Long timeUtilized = 0L;
 	private Long utilStart;
 
@@ -85,5 +88,21 @@ public abstract class SimulationObject
 	{
 		timeUtilized += timeUtilizedDelta;
 		return timeUtilizedDelta;
+	}
+
+	private Double getLongitude() {
+		return longitude;
+	}
+
+	private void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+
+	private Double getLatitude() {
+		return latitude;
+	}
+
+	private void setLatitude(Double latitude) {
+		this.latitude = latitude;
 	}
 }

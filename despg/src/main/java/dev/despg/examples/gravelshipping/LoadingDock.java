@@ -17,27 +17,28 @@ import dev.despg.core.SimulationObjects;
 
 public class LoadingDock extends SimulationObject
 {
-	//Testneu
 	private String name;
 	private Truck truckCurrentlyLoaded;
 	private Boolean dockFailed = false;
 
 	private static EventQueue eventQueue;
 
-	private static Randomizer loadingWeight; // static weil 1 Randomizer pro Klasse nicht für jedes Objekt
+	private static Randomizer loadingWeight;
 	private static Randomizer loadingTime;
 	private static Randomizer drivingToWeighingStation;
 	private static Randomizer dockFailureRepairTime;
-
+	
 	/**
 	 * Constructor for new LoadingDocks, injects its dependency to SimulationObjects
 	 * and creates the required randomizer instances.
 	 *
 	 * @param name Name of the LoadingDock instance
 	 */
-	public LoadingDock(String name)
+	public LoadingDock(String name, Double latitude, Double longitude)
 	{
 		this.name = name;
+	    this.latitude = latitude;
+		this.longitude = longitude;
 
 		eventQueue = EventQueue.getInstance();
 		SimulationObjects.getInstance().add(this);

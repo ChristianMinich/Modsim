@@ -9,6 +9,7 @@
  */
 package dev.despg.examples.gravelshipping;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,10 +21,13 @@ import dev.despg.core.Time;
 public class GravelShipping extends Simulation
 {
 	private static Logger logger = Logger.getLogger("GravelShipping");
+	private static String pathLoadingdocks = ("src/despgutils/Routes.csv");
+	private static String pathWeighingstation = ("src/despgutils/Routes.csv");
+	private static String pathDestinations = ("src/despgutils/Routes.csv");
 
 	private static Integer gravelToShip = 2000;
 	private static Integer gravelShipped = 0;
-	private final int gravelToShippedFinal = gravelToShip;
+	private final int gravelToShippedFinal = gravelToShip;;
 
 	private static Integer successfulLoadings = 0;
 	private static Integer successfulLoadingSizes = 0;
@@ -34,6 +38,10 @@ public class GravelShipping extends Simulation
 	private static final int NUM_TRUCKS = 2;
 	private static final int NUM_LOADING_DOCKS = 3;
 	private static final int NUM_WEIGHING_STATIONS = 2;
+	
+	private static ArrayList<Location> LOADING_DOCK_LOCATION = Reader.loadCoordinates(pathLoadingdocks);
+	private static ArrayList<Location> WEIGHING_LOCATION = Reader.loadCoordinates(pathWeighingstation);
+	private static ArrayList<Location> DESTINATION_LOCATION = Reader.loadCoordinates(pathDestinations);
 
 	/**
 	 * Defines the setup of simulation objects and starting events before executing
@@ -51,10 +59,10 @@ public class GravelShipping extends Simulation
 			eventqueue.add(new Event(0L, GravelLoadingEventTypes.Loading, new Truck("T" + i), LoadingDock.class, null));
 
 		for (int i = 0; i < NUM_LOADING_DOCKS; i++)
-			new LoadingDock("LD" + i);
+			new LoadingDock("LD " + LOADING_DOCK_LOCATION.get(i).getName(), LOADING_DOCK_LOCATION.get(i).getLatitude(), LOADING_DOCK_LOCATION.get(i).getLongitude());
 
 		for (int i = 0; i < NUM_WEIGHING_STATIONS; i++)
-			new WeighingStation("WS" + i);
+			new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude());
 
 		GravelShipping gs = new GravelShipping();
 		long timeStep = gs.simulate();
