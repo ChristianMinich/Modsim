@@ -85,7 +85,7 @@ public class Shipment extends SimulationObject{
 		}
 		else
 		{
-			Event event = eventQueue.getNextEvent(timeStep, true, GravelLoadingEventTypes.LoadingDone, null, this);
+			Event event = eventQueue.getNextEvent(timeStep, true, GravelLoadingEventTypes.UnloadingDone, null, this);
 			if (event != null && event.getObjectAttached() != null
 					&& event.getObjectAttached().getClass() == Truck.class)
 			{
