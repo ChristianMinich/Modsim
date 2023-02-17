@@ -54,7 +54,7 @@ graphhopper:
   datareader.file: your_local_file_path.osm.pbf
   graph.location: germany-gh
 ```
-- To Start the Server use the following Command
+- To Start the Server use the following Command inside the Terminal
 ```
 java -Xmx5g -Xms5g -jar your_local_file_path_of_the_graphhopper.jar server your_local_file_path_of_the_config.yml
 ```
