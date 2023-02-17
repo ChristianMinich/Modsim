@@ -28,7 +28,7 @@ hopper.setOSMFile("" + "your_local_file_path.osm.pbf");
 ````
 - Replace the Cache File Path inside the Class Routing.java to your Local Cache File Path.
 ```
-hopper.setGraphHopperLocation("target/routing-custom-graph-cache");
+hopper.setGraphHopperLocation("your_cache_path");
 ```
  
 ### VM - Arguments
