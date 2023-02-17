@@ -157,7 +157,7 @@ public final class EventQueue extends ArrayList<Event>
             Collections.sort(events);
                     return events.get(0).getReceiver();
                 }
-        return this.getInstance().countEvents(timeStep, true, GravelLoadingEventTypes.Weighing, null, null); 
+        return null; 
     }
 	
 	public SimulationObject getNextLoadingDock(long timeStep, boolean past, UniqueEventDescription eventTypeNumber,
