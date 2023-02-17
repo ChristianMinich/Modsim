@@ -52,7 +52,6 @@ hopper.setGraphHopperLocation("your_cache_path");
 graphhopper:
  
   datareader.file: your_local_file_path.osm.pbf
-  graph.location: germany-gh
 ```
 - To Start the Server use the following Command inside the Terminal
 ```
