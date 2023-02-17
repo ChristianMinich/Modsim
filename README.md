@@ -47,7 +47,7 @@ hopper.setGraphHopperLocation("your_cache_path");
 ## Server - Setup
 - Disclaimer, when first executing it may take a while until the Map is fully loaded.
 - Download the [config.yml](despg/src/despgutils/config.yml).
-- Change the Parameter datareader.file to your_local_file_path.osm.pbf.
+- Change the Parameter datareader.file to your_local_file_path.osm.pbf
 ```
 graphhopper:
  
