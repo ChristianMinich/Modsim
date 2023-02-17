@@ -16,6 +16,8 @@ package dev.despg.core;
  */
 public abstract class SimulationObject
 {
+	private Long Longitude;
+	private Long Latitude;
 	private Long timeUtilized = 0L;
 	private Long utilStart;
 
