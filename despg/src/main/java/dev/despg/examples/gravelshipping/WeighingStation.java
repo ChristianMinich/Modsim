@@ -32,7 +32,7 @@ public final class WeighingStation extends SimulationObject
 	 *
 	 * @param name Name of the WeightingStation instance
 	 */
-	public WeighingStation(String name, long latitude, long longitude)
+	public WeighingStation(String name, Double latitude, Double longitude)
 	{
 		this.name = name;
 		

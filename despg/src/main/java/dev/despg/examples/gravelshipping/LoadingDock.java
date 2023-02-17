@@ -34,10 +34,10 @@ public class LoadingDock extends SimulationObject
 	 *
 	 * @param name Name of the LoadingDock instance
 	 */
-	public LoadingDock(String name, long latitude, long longitude)
+	public LoadingDock(String name, Double latitude, Double longitude)
 	{
 		this.name = name;
-		this.latitude = latitude;
+	    this.latitude = latitude;
 		this.longitude = longitude;
 
 		eventQueue = EventQueue.getInstance();

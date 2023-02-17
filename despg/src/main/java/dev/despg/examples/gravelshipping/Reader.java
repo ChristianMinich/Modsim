@@ -1,56 +1,24 @@
 package dev.despg.examples.gravelshipping;
 
 import java.io.BufferedReader;
-//import java.io.File;
-//import java.io.FileNotFoundException;
 import java.io.FileReader;
-//import java.lang.reflect.Array;
 import java.util.ArrayList;
-//import java.util.List;
-//import java.util.Scanner;
-
-/*public class Reader {
-
-	// NOT FINAL
-	private static final String COMMA_DELIMITER = ",";
-
-	public static ArrayList<String> loadCoordinates(String filepath) throws FileNotFoundException{
-
-		List<List<String>> records = new ArrayList<>();
-		try (Scanner scanner = new Scanner(new File(filepath));) {
-			while (scanner.hasNextLine()) {
-				records.add(getRecordFromLine(scanner.nextLine()));
-			}
-		}
-		return records;
-	}
-
-	private static List<String> getRecordFromLine(String line) {
-		List<String> values = new ArrayList<String>();
-		try (Scanner rowScanner = new Scanner(line)) {
-			rowScanner.useDelimiter(COMMA_DELIMITER);
-			while (rowScanner.hasNext()) {
-				values.add(rowScanner.next());
-			}
-		}
-		return values;
-	}
-}*/
 
 public class Reader {
-    public static void main(String[] args) {
-        ArrayList<String> values = new ArrayList<String>();
+    public static ArrayList<Location> loadCoordinates(String path) {
+        ArrayList<Location> locations = new ArrayList<Location>();
         try {
-            BufferedReader br = new BufferedReader(new FileReader("src/despgutils/Routes.csv"));
+            BufferedReader br = new BufferedReader(new FileReader(path));
             String line;
             while ((line = br.readLine()) != null) {
-                values.add(line);
+            	String[] token = line.split(",");
+                //System.out.println(token[0] + " | "+ token[1]+ " | "+ token[2]);
+                locations.add(new Location(token[0], Double.parseDouble(token[1]),Double.parseDouble(token[2])));
             }
             br.close();
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
         }
-        System.out.println(values);
-        System.out.println(values.get(2).);
+       return locations;
     }
 }
