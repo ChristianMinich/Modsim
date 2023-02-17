@@ -14,6 +14,11 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import dev.despg.examples.gravelshipping.GravelLoadingEventTypes;
+import dev.despg.examples.gravelshipping.WeighingStation;
+ 
+
+
 /**
  * The EventQueue class manages an ArrayList of all scheduled Events.
  */
@@ -117,4 +122,55 @@ public final class EventQueue extends ArrayList<Event>
 	{
 		return filterEvents(timeStep, past, eventTypeNumber, receiverClass, receiverObject).size();
 	}
+
+
+	/*public Event getNextFreeObject(long timeStep, boolean past, UniqueEventDescription eventTypeNumber,
+		Class<? extends SimulationObject> receiverClass, SimulationObject receiverObject)
+	{
+			ArrayList<Event> subevents = new ArrayList<Event>(this.size());
+
+			for (Event e : this)
+			{
+				if ((past && timeStep >= e.getTimeStep())
+						&& (receiverClass == e.getReceiverClass())
+						&& (receiverObject == e.getReceiver())
+						&& (eventTypeNumber == e.getEventDescription()))
+					subevents.add(e);
+			}
+	ArrayList<Event> events = subevents;
+
+	if (events.size() > 0)
+	{
+		Collections.sort(events);
+		return events.get(0);
+	}
+
+	return null;*/
+	
+	public SimulationObject getNextWeighingStation(long timeStep, boolean past, UniqueEventDescription eventTypeNumber,
+            Class<? extends SimulationObject> receiverClass, SimulationObject receiverObject)
+    {
+        ArrayList<Event> events = filterEvents(timeStep, past, GravelLoadingEventTypes.WeighingDone, receiverClass, receiverObject);
+
+        if (events.size() > 0)
+        {
+            Collections.sort(events);
+                    return events.get(0).getReceiver();
+                }
+        return null; 
+    }
+	
+	public SimulationObject getNextLoadingDock(long timeStep, boolean past, UniqueEventDescription eventTypeNumber,
+            Class<? extends SimulationObject> receiverClass, SimulationObject receiverObject)
+    {
+        ArrayList<Event> events = filterEvents(timeStep, past, GravelLoadingEventTypes.LoadingDone, receiverClass, receiverObject);
+
+        if (events.size() > 0)
+        {
+            Collections.sort(events);
+                    return events.get(0).getReceiver();
+                }
+        return null; 
+    }
 }
+

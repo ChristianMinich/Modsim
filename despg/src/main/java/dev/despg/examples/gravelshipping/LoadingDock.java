@@ -20,12 +20,12 @@ public class LoadingDock extends SimulationObject
 	private String name;
 	private Truck truckCurrentlyLoaded;
 	private Boolean dockFailed = false;
+	private static Long drivingToWeighingStation;
 
 	private static EventQueue eventQueue;
 
 	private static Randomizer loadingWeight;
 	private static Randomizer loadingTime;
-	private static Randomizer drivingToWeighingStation;
 	private static Randomizer dockFailureRepairTime;
 	
 	/**
@@ -53,11 +53,11 @@ public class LoadingDock extends SimulationObject
 		loadingTime.addProbInt(0.8, 120);
 		loadingTime.addProbInt(1.0, 180);
 
-		//TODO Replace with Shipment
+		/*//TODO Replace with Shipment
 		drivingToWeighingStation = new Randomizer();
 		drivingToWeighingStation.addProbInt(0.5, 30);
 		drivingToWeighingStation.addProbInt(0.78, 45);
-		drivingToWeighingStation.addProbInt(1.0, 60);
+		drivingToWeighingStation.addProbInt(1.0, 60);*/
 		
 		dockFailureRepairTime = new Randomizer();
 		dockFailureRepairTime.addProbInt(0.8, 0);
@@ -132,8 +132,14 @@ public class LoadingDock extends SimulationObject
 					&& event.getObjectAttached().getClass() == Truck.class)
 			{
 				eventQueue.remove(event);
+
+				SimulationObject nextEvent = eventQueue.getNextWeighingStation(timeStep, false, null, null, null);
+				WeighingStation ws = (WeighingStation) nextEvent;
+				
+				drivingToWeighingStation = Routing.customizableRouting(this.latitude, this.longitude, 48.77585, 9.18293);
+				
 				eventQueue.add(new Event(
-						timeStep + event.getObjectAttached().addUtilization(drivingToWeighingStation.nextInt()),
+						timeStep + event.getObjectAttached().addUtilization(drivingToWeighingStation),
 						GravelLoadingEventTypes.Weighing, truckCurrentlyLoaded, WeighingStation.class, null));
 
 				truckCurrentlyLoaded = null;

@@ -30,11 +30,11 @@ import static com.graphhopper.json.Statement.Op.LIMIT;
 import static com.graphhopper.json.Statement.Op.MULTIPLY;
 
 public class Routing {
-	public static void customizableRouting(double fromLat, double fromLon, double toLat, double toLo) {
+	public static Long customizableRouting(double fromLat, double fromLon, double toLat, double toLo) {
 		GraphHopper hopper = new GraphHopper();
 		//hopper.setOSMFile("" + "C:/Users/andre/Documents/GitHub/Modsim/despg/src/despgutils/germany-latest.osm.pbf");
-		hopper.setOSMFile("src/despgutils/germany-latest.osm.pbf");
-		hopper.setGraphHopperLocation("target/routing-custom-graph-cache");
+		hopper.setOSMFile("D:/Modsimsafety/Cache/germany-latest.osm.pbf");
+		hopper.setGraphHopperLocation("D:/Modsimsafety/Cache/routing-custom-graph-cache");
 		hopper.setProfiles(new CustomProfile("car_custom").setCustomModel(new CustomModel()).setVehicle("car"));
 
 		hopper.getLMPreparationHandler().setLMProfiles(new LMProfile("car_custom"));
@@ -76,9 +76,10 @@ public class Routing {
 
 		InstructionList il = path.getInstructions();
 		// iterate over all turn instructions
-		for (Instruction instruction : il) {
+		/*for (Instruction instruction : il) {
 			System.out.println("distance " + Math.round(instruction.getDistance()) + 
 					" for instruction: " + instruction.getName() + " " + instruction.getTurnDescription(tr) + " Time: " + (instruction.getTime() / 1000) + " seconds");
-		}
+		}*/
 		hopper.close();
+		return ((timeInMs / 1000) / 60); // Conversion from Ms to Minutes.
 	}}

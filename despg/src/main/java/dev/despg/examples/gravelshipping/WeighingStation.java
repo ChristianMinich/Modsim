@@ -23,7 +23,7 @@ public final class WeighingStation extends SimulationObject
 	private String name;
 	private Truck truckInWeighingStation;
 
-	private static Randomizer drivingToLoadingDock;
+	private static Randomizer drivingToCustomer;
 	private static EventQueue eventQueue;
 
 	/**
@@ -42,10 +42,10 @@ public final class WeighingStation extends SimulationObject
 		eventQueue = EventQueue.getInstance();
 
 		//TODO Replace with Shipment
-		drivingToLoadingDock = new Randomizer();
-		drivingToLoadingDock.addProbInt(0.5, 120);
-		drivingToLoadingDock.addProbInt(0.8, 150);
-		drivingToLoadingDock.addProbInt(1.0, 180);
+		drivingToCustomer = new Randomizer();
+		drivingToCustomer.addProbInt(0.5, 120);
+		drivingToCustomer.addProbInt(0.8, 150);
+		drivingToCustomer.addProbInt(1.0, 180);
 
 		SimulationObjects.getInstance().add(this);
 	}
@@ -107,14 +107,14 @@ public final class WeighingStation extends SimulationObject
 				GravelShipping.setGravelToShip(GravelShipping.getGravelToShip() + truckToWeighLoad);
 				GravelShipping.increaseUnsuccessfulLoadingSizes(truckToWeighLoad);
 				GravelShipping.increaseUnsuccessfulLoadings();
-				driveToLoadingStation = truckInWeighingStation.addUtilization(drivingToLoadingDock.nextInt());
+				driveToLoadingStation = truckInWeighingStation.addUtilization(drivingToCustomer.nextInt());
 			}
 			else
 			{
 				GravelShipping.increaseGravelShipped(truckToWeighLoad);
 				GravelShipping.increaseSuccessfulLoadingSizes(truckToWeighLoad);
 				GravelShipping.increaseSuccessfulLoadings();
-				driveToLoadingStation = truckInWeighingStation.addUtilization(drivingToLoadingDock.nextInt());
+				driveToLoadingStation = truckInWeighingStation.addUtilization(drivingToCustomer.nextInt());
 			}
 			eventQueue.add(new Event(timeStep + driveToLoadingStation, GravelLoadingEventTypes.Loading,
 					truckInWeighingStation, LoadingDock.class, null));

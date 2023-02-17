@@ -10,7 +10,9 @@
  */
 package dev.despg.examples.gravelshipping;
 
+import dev.despg.core.Event;
 import dev.despg.core.EventQueue;
+import dev.despg.core.Randomizer;
 import dev.despg.core.SimulationObject;
 import dev.despg.core.SimulationObjects;
 
@@ -18,12 +20,30 @@ public class Shipment extends SimulationObject{
 
 	private String name;
 	private Truck truckCurrentlyLoaded;
+	private static EventQueue eventQueue;
+	private static Randomizer unloadingTime;
+	private static Long drivingToLoadingDock;
 	
-	public Shipment(String name) {
+	public Shipment(String name, Double latitude, Double longitude)
+	{
 		this.name = name;
-		
-		EventQueue eventQueue = EventQueue.getInstance();
+	    this.latitude = latitude;
+		this.longitude = longitude;
+
+		eventQueue = EventQueue.getInstance();
 		SimulationObjects.getInstance().add(this);
+
+		unloadingTime = new Randomizer();
+		unloadingTime.addProbInt(0.3, 60);
+		unloadingTime.addProbInt(0.8, 120);
+		unloadingTime.addProbInt(1.0, 180);
+
+		/*//TODO Replace with Shipment
+		drivingToWeighingStation = new Randomizer();
+		drivingToWeighingStation.addProbInt(0.5, 30);
+		drivingToWeighingStation.addProbInt(0.78, 45);
+		drivingToWeighingStation.addProbInt(1.0, 60);*/
+		
 	}
 	
 	
@@ -41,8 +61,51 @@ public class Shipment extends SimulationObject{
 	 */
 	@Override
 	public boolean simulate(long timeStep) {
-		//TODO Implementation - interact with Class Routing
+		
+		if (truckCurrentlyLoaded == null && GravelShipping.getGravelToShip() > 0)
+		{
+			Event event = eventQueue.getNextEvent(timeStep, true, GravelLoadingEventTypes.Unloading, this.getClass(), null);
+			if (event != null && event.getObjectAttached() != null
+					&& event.getObjectAttached().getClass() == Truck.class)
+			{
+				eventQueue.remove(event);
+
+				truckCurrentlyLoaded = (Truck) event.getObjectAttached();
+				// verlade das Gravel was du noch hast
+				truckCurrentlyLoaded.unload();
+				SimulationObject nextLoadingDock = eventQueue.getNextLoadingDock(timeStep, false, null, null, null);
+				LoadingDock ld = (LoadingDock) nextLoadingDock;
+				drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, ld.getLatitude(), ld.getLongitude());
+				eventQueue.add(new Event(timeStep + truckCurrentlyLoaded.addUtilization(unloadingTime.nextInt() + drivingToLoadingDock),
+						GravelLoadingEventTypes.UnloadingDone, truckCurrentlyLoaded, null, this));
+
+				utilStart(timeStep);
+				return true;
+			}
+		}
+		else
+		{
+			Event event = eventQueue.getNextEvent(timeStep, true, GravelLoadingEventTypes.UnloadingDone, null, this);
+			if (event != null && event.getObjectAttached() != null
+					&& event.getObjectAttached().getClass() == Truck.class)
+			{
+				eventQueue.remove(event);
+
+				SimulationObject nextLoadingDock = eventQueue.getNextLoadingDock(timeStep, false, null, null, null);
+				LoadingDock ld = (LoadingDock) nextLoadingDock;
+				
+				drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, ld.getLatitude(), ld.getLongitude());
+				GravelShipping.increaseSuccessfulUnloadings();
+				eventQueue.add(new Event(
+						timeStep + event.getObjectAttached().addUtilization(drivingToLoadingDock),
+						GravelLoadingEventTypes.Unloading, truckCurrentlyLoaded, LoadingDock.class, null));
+
+				truckCurrentlyLoaded = null;
+				utilStop(timeStep);		
+				return true;
+			}
+		}
+
 		return false;
 	}
-
 }

@@ -90,19 +90,19 @@ public abstract class SimulationObject
 		return timeUtilizedDelta;
 	}
 
-	private Double getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
 
-	private void setLongitude(Double longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
 
-	private Double getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
 
-	private void setLatitude(Double latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
 }
