@@ -74,9 +74,7 @@ public class GravelShipping extends Simulation
 		for (int i = 0; i < NUM_WEIGHING_STATIONS; i++) {
 			new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude());
 			
-			while(i < 1) {
-				FirstWeighingStation.add(new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude()));
-			}
+			FirstWeighingStation.add(new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude()));
 		}
 		
 		for (int i = 0; i < NUM_SHIPMENTS; i++)
