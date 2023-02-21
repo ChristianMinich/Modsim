@@ -133,7 +133,9 @@ public class LoadingDock extends SimulationObject
 			{
 				eventQueue.remove(event);
 
-				SimulationObject nextEvent = eventQueue.getNextWeighingStation(timeStep, false, null, null, null);
+				SimulationObject nextEvent = eventQueue.getNextWeighingStation(timeStep);
+				//Test ob WeighingStation korrekt ausgelesen werden kann
+				
 				WeighingStation ws = (WeighingStation) nextEvent;
 				
 				drivingToWeighingStation = Routing.customizableRouting(this.latitude, this.longitude, 48.77585, 9.18293);

@@ -73,7 +73,7 @@ public class Shipment extends SimulationObject{
 				truckCurrentlyLoaded = (Truck) event.getObjectAttached();
 				// verlade das Gravel was du noch hast
 				truckCurrentlyLoaded.unload();
-				SimulationObject nextLoadingDock = eventQueue.getNextLoadingDock(timeStep, false, null, null, null);
+				SimulationObject nextLoadingDock = eventQueue.getNextLoadingDock(timeStep);
 				LoadingDock ld = (LoadingDock) nextLoadingDock;
 				drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, ld.getLatitude(), ld.getLongitude());
 				eventQueue.add(new Event(timeStep + truckCurrentlyLoaded.addUtilization(unloadingTime.nextInt() + drivingToLoadingDock),
@@ -91,7 +91,7 @@ public class Shipment extends SimulationObject{
 			{
 				eventQueue.remove(event);
 
-				SimulationObject nextLoadingDock = eventQueue.getNextLoadingDock(timeStep, false, null, null, null);
+				SimulationObject nextLoadingDock = eventQueue.getNextLoadingDock(timeStep);
 				LoadingDock ld = (LoadingDock) nextLoadingDock;
 				
 				drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, ld.getLatitude(), ld.getLongitude());

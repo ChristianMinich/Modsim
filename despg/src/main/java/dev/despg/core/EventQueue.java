@@ -147,10 +147,9 @@ public final class EventQueue extends ArrayList<Event>
 
 	return null;*/
 	
-	public SimulationObject getNextWeighingStation(long timeStep, boolean past, UniqueEventDescription eventTypeNumber,
-            Class<? extends SimulationObject> receiverClass, SimulationObject receiverObject)
+	public SimulationObject getNextWeighingStation(long timeStep)
     {
-        ArrayList<Event> events = filterEvents(timeStep, past, GravelLoadingEventTypes.WeighingDone, receiverClass, receiverObject);
+        ArrayList<Event> events = filterEvents(timeStep, false, GravelLoadingEventTypes.WeighingDone, null, null);
 
         if (events.size() > 0)
         {
@@ -160,10 +159,9 @@ public final class EventQueue extends ArrayList<Event>
         return null; 
     }
 	
-	public SimulationObject getNextLoadingDock(long timeStep, boolean past, UniqueEventDescription eventTypeNumber,
-            Class<? extends SimulationObject> receiverClass, SimulationObject receiverObject)
+	public SimulationObject getNextLoadingDock(long timeStep)
     {
-        ArrayList<Event> events = filterEvents(timeStep, past, GravelLoadingEventTypes.LoadingDone, receiverClass, receiverObject);
+        ArrayList<Event> events = filterEvents(timeStep, false, GravelLoadingEventTypes.LoadingDone, null, null);
 
         if (events.size() > 0)
         {
