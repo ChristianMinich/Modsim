@@ -52,12 +52,6 @@ public class LoadingDock extends SimulationObject
 		loadingTime.addProbInt(0.3, 60);
 		loadingTime.addProbInt(0.8, 120);
 		loadingTime.addProbInt(1.0, 180);
-
-		/*//TODO Replace with Shipment
-		drivingToWeighingStation = new Randomizer();
-		drivingToWeighingStation.addProbInt(0.5, 30);
-		drivingToWeighingStation.addProbInt(0.78, 45);
-		drivingToWeighingStation.addProbInt(1.0, 60);*/
 		
 		dockFailureRepairTime = new Randomizer();
 		dockFailureRepairTime.addProbInt(0.8, 0);
@@ -138,7 +132,7 @@ public class LoadingDock extends SimulationObject
 				
 				WeighingStation ws = (WeighingStation) nextEvent;
 				
-				drivingToWeighingStation = Routing.customizableRouting(this.latitude, this.longitude, 48.77585, 9.18293);
+				drivingToWeighingStation = Routing.customizableRouting(this.latitude, this.longitude, ws.getLatitude(), ws.getLongitude());
 				
 				eventQueue.add(new Event(
 						timeStep + event.getObjectAttached().addUtilization(drivingToWeighingStation),
@@ -146,7 +140,7 @@ public class LoadingDock extends SimulationObject
 
 				truckCurrentlyLoaded = null;
 				utilStop(timeStep);
-				// Failure
+				
 				int repairTime = dockFailureRepairTime.nextInt(); 
 				if(repairTime > 0) 
 				{
@@ -154,7 +148,6 @@ public class LoadingDock extends SimulationObject
 					eventQueue.add(new Event(timeStep + repairTime, GravelLoadingEventTypes.DockRepaired,
 							null, null, this));
 				} 
-				// TODO: Tracking Failure Time 
 				
 				return true;
 			}

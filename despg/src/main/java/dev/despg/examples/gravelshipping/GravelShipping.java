@@ -21,9 +21,9 @@ import dev.despg.core.Time;
 public class GravelShipping extends Simulation
 {
 	private static Logger logger = Logger.getLogger("GravelShipping");
-	private static String pathLoadingdocks = ("src/despgutils/Routes.csv");
-	private static String pathWeighingstation = ("src/despgutils/Routes.csv");
-	private static String pathDestinations = ("src/despgutils/Routes.csv");
+	private static String pathLoadingdocks = ("src/despgutils/LoadingDocks.csv");
+	private static String pathWeighingstation = ("src/despgutils/WeighingStations.csv");
+	private static String pathDestinations = ("src/despgutils/Destinations.csv");
 
 	private static Integer gravelToShip = 2000;
 	private static Integer gravelShipped = 0;
@@ -44,6 +44,7 @@ public class GravelShipping extends Simulation
 	private static final int NUM_TRUCKS = 2;
 	private static final int NUM_LOADING_DOCKS = 3;
 	private static final int NUM_WEIGHING_STATIONS = 2;
+	private static final int NUM_SHIPMENTS = 10;
 	
 	private static ArrayList<Location> LOADING_DOCK_LOCATION = Reader.loadCoordinates(pathLoadingdocks);
 	private static ArrayList<Location> WEIGHING_LOCATION = Reader.loadCoordinates(pathWeighingstation);
@@ -68,7 +69,10 @@ public class GravelShipping extends Simulation
 			new LoadingDock("LD " + LOADING_DOCK_LOCATION.get(i).getName(), LOADING_DOCK_LOCATION.get(i).getLatitude(), LOADING_DOCK_LOCATION.get(i).getLongitude());
 
 		for (int i = 0; i < NUM_WEIGHING_STATIONS; i++)
-			new WeighingStation("WS " + WEIGHING_LOCATION.get(i+3).getName(), WEIGHING_LOCATION.get(i+3).getLatitude(), WEIGHING_LOCATION.get(i+3).getLongitude());
+			new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude());
+		
+		for (int i = 0; i < NUM_SHIPMENTS; i++)
+			new WeighingStation("SP " + DESTINATION_LOCATION.get(i).getName(), DESTINATION_LOCATION.get(i).getLatitude(), DESTINATION_LOCATION.get(i).getLongitude());
 
 		GravelShipping gs = new GravelShipping();
 		long timeStep = gs.simulate();
@@ -86,9 +90,17 @@ public class GravelShipping extends Simulation
 				String.format("Unsuccessfull loadings\t = %d(%.2f%%), mean size %.2ft", unsuccessfulLoadings,
 						(double) unsuccessfulLoadings / (successfulLoadings + unsuccessfulLoadings) * 100,
 						(double) unsuccessfulLoadingSizes / unsuccessfulLoadings));
-		logger.log(Level.INFO,successfulUnloadings.toString());
 		
-		Routing.customizableRouting(52.677722,7.294407, 52.517879,7.321728);
+		logger.log(Level.INFO,
+				String.format("Successfull Unloadings\t = %d(%.2f%%), mean size %.2ft", successfulUnloadings,
+						(double) successfulUnloadings / (successfulUnloadings + unsuccessfulUnloadings) * 100,
+						(double) successfulUnloadingSizes / successfulUnloadings));
+		
+		logger.log(Level.INFO,
+				String.format("Unsuccessfull Unloadings\t = %d(%.2f%%), mean size %.2ft", unsuccessfulUnloadings,
+						(double) unsuccessfulUnloadings / (successfulUnloadings + unsuccessfulUnloadings) * 100,
+						(double) unsuccessfulUnloadingSizes / unsuccessfulUnloadings));
+		
 	}
 
 	/**
@@ -149,8 +161,24 @@ public class GravelShipping extends Simulation
 	{
 		GravelShipping.unsuccessfulLoadingSizes += unsuccessfulLoadingSizes;
 	}
+	
 	public static void increaseSuccessfulUnloadings()
 	{
 		successfulUnloadings++;
+	}
+	
+	public static void increaseUnsuccessfulUnloadings()
+	{
+		GravelShipping.unsuccessfulUnloadings++;
+	}
+	
+	public static void increaseSuccessfulUnloadingSizes(Integer successfulUnloadingSizes)
+	{
+		GravelShipping.successfulUnloadingSizes += successfulUnloadingSizes;
+	}
+	
+	public static void increaseUnsuccessfulUnloadingSizes(Integer unsuccessfulUnloadingSizes)
+	{
+		GravelShipping.unsuccessfulUnloadingSizes += unsuccessfulUnloadingSizes;
 	}
 }

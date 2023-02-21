@@ -170,5 +170,17 @@ public final class EventQueue extends ArrayList<Event>
                 }
         return null; 
     }
+	
+	public SimulationObject getNextShipment(long timeStep)
+    {
+        ArrayList<Event> events = filterEvents(timeStep, false, GravelLoadingEventTypes.UnloadingDone, null, null);
+
+        if (events.size() > 0)
+        {
+            Collections.sort(events);
+                    return events.get(0).getReceiver();
+                }
+        return null; 
+    }
 }
 

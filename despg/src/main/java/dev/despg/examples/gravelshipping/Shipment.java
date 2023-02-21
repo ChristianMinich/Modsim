@@ -37,12 +37,6 @@ public class Shipment extends SimulationObject{
 		unloadingTime.addProbInt(0.3, 60);
 		unloadingTime.addProbInt(0.8, 120);
 		unloadingTime.addProbInt(1.0, 180);
-
-		/*//TODO Replace with Shipment
-		drivingToWeighingStation = new Randomizer();
-		drivingToWeighingStation.addProbInt(0.5, 30);
-		drivingToWeighingStation.addProbInt(0.78, 45);
-		drivingToWeighingStation.addProbInt(1.0, 60);*/
 		
 	}
 	
@@ -71,10 +65,11 @@ public class Shipment extends SimulationObject{
 				eventQueue.remove(event);
 
 				truckCurrentlyLoaded = (Truck) event.getObjectAttached();
-				// verlade das Gravel was du noch hast
 				truckCurrentlyLoaded.unload();
+				
 				SimulationObject nextLoadingDock = eventQueue.getNextLoadingDock(timeStep);
 				LoadingDock ld = (LoadingDock) nextLoadingDock;
+				
 				drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, ld.getLatitude(), ld.getLongitude());
 				eventQueue.add(new Event(timeStep + truckCurrentlyLoaded.addUtilization(unloadingTime.nextInt() + drivingToLoadingDock),
 						GravelLoadingEventTypes.UnloadingDone, truckCurrentlyLoaded, null, this));
