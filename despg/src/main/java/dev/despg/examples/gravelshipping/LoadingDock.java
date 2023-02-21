@@ -132,6 +132,10 @@ public class LoadingDock extends SimulationObject
 				
 				WeighingStation ws = (WeighingStation) nextEvent;
 				
+				if(ws == null) {
+					ws = (WeighingStation) GravelShipping.getFirstWeighingStation();
+				}
+				
 				drivingToWeighingStation = Routing.customizableRouting(this.latitude, this.longitude, ws.getLatitude(), ws.getLongitude());
 				
 				eventQueue.add(new Event(
