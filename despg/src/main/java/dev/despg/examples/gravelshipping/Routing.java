@@ -32,9 +32,13 @@ import static com.graphhopper.json.Statement.Op.MULTIPLY;
 public class Routing {
 	public static Long customizableRouting(double fromLat, double fromLon, double toLat, double toLo) {
 		GraphHopper hopper = new GraphHopper();
+		//############ Bitte den für euch passenden Befehl aktivieren und den rest nur auskommentieren und NICHT löschen. 
 		//hopper.setOSMFile("" + "C:/Users/andre/Documents/GitHub/Modsim/despg/src/despgutils/germany-latest.osm.pbf");
-		hopper.setOSMFile("D:/Modsimsafety/Cache/germany-latest.osm.pbf");
-		hopper.setGraphHopperLocation("D:/Modsimsafety/Cache/routing-custom-graph-cache");
+		//hopper.setOSMFile("C:/Users/andre/Documents/GitHub/Modsim/despg/src/despgutils/germany-latest.osm.pbf");
+		//hopper.setGraphHopperLocation("D:/Modsimsafety/Cache/routing-custom-graph-cache");
+		hopper.setOSMFile("/Users/rene/Desktop/Studium/HS-Osnabrueck/Eclipse/OSM-files.nosync/germany-latest.osm.pbf");
+		hopper.setGraphHopperLocation("/Users/rene/Desktop/Studium/HS-Osnabrueck/Eclipse/OSM-files.nosync/routing-custom-graph-cache");
+		
 		hopper.setProfiles(new CustomProfile("car_custom").setCustomModel(new CustomModel()).setVehicle("car"));
 
 		hopper.getLMPreparationHandler().setLMProfiles(new LMProfile("car_custom"));
