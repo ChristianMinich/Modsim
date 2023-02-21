@@ -50,8 +50,6 @@ public class GravelShipping extends Simulation
 	private static ArrayList<Location> LOADING_DOCK_LOCATION = Reader.loadCoordinates(pathLoadingdocks);
 	private static ArrayList<Location> WEIGHING_LOCATION = Reader.loadCoordinates(pathWeighingstation);
 	private static ArrayList<Location> DESTINATION_LOCATION = Reader.loadCoordinates(pathDestinations);
-	
-	private static ArrayList<WeighingStation> FirstWeighingStation;
 
 	/**
 	 * Defines the setup of simulation objects and starting events before executing
@@ -77,7 +75,7 @@ public class GravelShipping extends Simulation
 		}
 		
 		for (int i = 0; i < NUM_SHIPMENTS; i++)
-			new WeighingStation("SP " + DESTINATION_LOCATION.get(i).getName(), DESTINATION_LOCATION.get(i).getLatitude(), DESTINATION_LOCATION.get(i).getLongitude());
+			new Shipment("SP " + DESTINATION_LOCATION.get(i).getName(), DESTINATION_LOCATION.get(i).getLatitude(), DESTINATION_LOCATION.get(i).getLongitude());
 
 		GravelShipping gs = new GravelShipping();
 		long timeStep = gs.simulate();
@@ -127,9 +125,9 @@ public class GravelShipping extends Simulation
 				+ " #Trucks Loading Queue: " + numberOfTrucksLoadingQueue + ", # Trucks Weighing Queue: " + numberOfTrucksWeighingQueue + " ," + numberOfTrucksUnloadingQueue);
 	}
 	
-	public static WeighingStation getFirstWeighingStation()
+	public static SimulationObject getFirstWeighingStation()
 	{
-		return new WeighingStation("WS " + WEIGHING_LOCATION.get(0).getName(), WEIGHING_LOCATION.get(0).getLatitude(), WEIGHING_LOCATION.get(0).getLongitude());
+		return new WeighingStation("WS " + WEIGHING_LOCATION.get(6).getName(), WEIGHING_LOCATION.get(6).getLatitude(), WEIGHING_LOCATION.get(6).getLongitude());
 	}
 
 	public static Integer getGravelToShip()
