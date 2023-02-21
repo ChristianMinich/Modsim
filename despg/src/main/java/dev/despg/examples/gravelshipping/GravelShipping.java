@@ -128,7 +128,7 @@ public class GravelShipping extends Simulation
 				+ " #Trucks Loading Queue: " + numberOfTrucksLoadingQueue + ", # Trucks Weighing Queue: " + numberOfTrucksWeighingQueue + " ," + numberOfTrucksUnloadingQueue);
 	}
 	
-	public static SimulationObject getFirstWeighingStation(ArrayList<SimulationObject> FirstWeighingStation)
+	public static SimulationObject getFirstWeighingStation()
 	{
 		return FirstWeighingStation.get(0);
 	}
