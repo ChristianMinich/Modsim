@@ -21,11 +21,15 @@ import other data sources too.
 
 ## Installation
 - Make sure to use at least Java 8 and higher.
-- Follow the Link https://download.geofabrik.de/index.html to download the newest osm.pbf File of your desired Location<br>
+- Follow the Link https://download.geofabrik.de/europe/germany-latest.osm.pbf to download the newest osm.pbf File of your Germany<br>
 - Replace the File Path inside the Class Routing.java to your Local File Path.
 ````
 hopper.setOSMFile("" + "your_local_file_path.osm.pbf");
 ````
+- Replace the Cache File Path inside the Class Routing.java to your Local Cache File Path.
+```
+hopper.setGraphHopperLocation("your_cache_path");
+```
  
 ### VM - Arguments
 - Use at least 5Gb RAM
@@ -42,16 +46,14 @@ hopper.setOSMFile("" + "your_local_file_path.osm.pbf");
 
 ## Server - Setup
 - Disclaimer, when first executing it may take a while until the Map is fully loaded.
-- Download the config.yml insert your Local File Path.
-- Change the config.yml Parameter datareader.file to your_local_file_path.osm.pbf.
-- Change the graph.location to the sub_region you downloaded.
+- Download the [config.yml](despg/src/despgutils/config.yml).
+- Change the Parameter datareader.file to your_local_file_path.osm.pbf
 ```
 graphhopper:
  
   datareader.file: your_local_file_path.osm.pbf
-  graph.location: sub_region-gh
 ```
-- To Start the Server use the following Command
+- To Start the Server use the following Command inside the Terminal
 ```
 java -Xmx5g -Xms5g -jar your_local_file_path_of_the_graphhopper.jar server your_local_file_path_of_the_config.yml
 ```

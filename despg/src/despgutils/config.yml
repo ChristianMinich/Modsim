@@ -1,7 +1,7 @@
 graphhopper:
  
-  datareader.file: C:\Users\Chris\Desktop\JavaTest\berlin-latest.osm.pbf
-  graph.location: berlin-gh
+  datareader.file: your_local_file_path.osm.pbf
+  graph.location: germany-gh
   profiles:
     - name: bike
       vehicle: bike
