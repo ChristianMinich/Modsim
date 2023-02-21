@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import dev.despg.core.Event;
 import dev.despg.core.EventQueue;
 import dev.despg.core.Simulation;
+import dev.despg.core.SimulationObject;
 import dev.despg.core.Time;
 
 public class GravelShipping extends Simulation
@@ -49,6 +50,8 @@ public class GravelShipping extends Simulation
 	private static ArrayList<Location> LOADING_DOCK_LOCATION = Reader.loadCoordinates(pathLoadingdocks);
 	private static ArrayList<Location> WEIGHING_LOCATION = Reader.loadCoordinates(pathWeighingstation);
 	private static ArrayList<Location> DESTINATION_LOCATION = Reader.loadCoordinates(pathDestinations);
+	
+	private static ArrayList<SimulationObject> FirstWeighingStation;
 
 	/**
 	 * Defines the setup of simulation objects and starting events before executing
@@ -68,8 +71,13 @@ public class GravelShipping extends Simulation
 		for (int i = 0; i < NUM_LOADING_DOCKS; i++)
 			new LoadingDock("LD " + LOADING_DOCK_LOCATION.get(i).getName(), LOADING_DOCK_LOCATION.get(i).getLatitude(), LOADING_DOCK_LOCATION.get(i).getLongitude());
 
-		for (int i = 0; i < NUM_WEIGHING_STATIONS; i++)
+		for (int i = 0; i < NUM_WEIGHING_STATIONS; i++) {
 			new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude());
+			
+			if(i < 2) {
+				FirstWeighingStation.add(new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude()));
+			}
+		}
 		
 		for (int i = 0; i < NUM_SHIPMENTS; i++)
 			new WeighingStation("SP " + DESTINATION_LOCATION.get(i).getName(), DESTINATION_LOCATION.get(i).getLatitude(), DESTINATION_LOCATION.get(i).getLongitude());
@@ -120,6 +128,11 @@ public class GravelShipping extends Simulation
 
 		logger.log(Level.INFO, time + " " + shipped + "\n " + eventQueue
 				+ " #Trucks Loading Queue: " + numberOfTrucksLoadingQueue + ", # Trucks Weighing Queue: " + numberOfTrucksWeighingQueue + " ," + numberOfTrucksUnloadingQueue);
+	}
+	
+	public static SimulationObject getFirstWeighingStation()
+	{
+		return FirstWeighingStation.get(0);
 	}
 
 	public static Integer getGravelToShip()
