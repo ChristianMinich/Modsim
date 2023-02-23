@@ -5,6 +5,14 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 public class Reader {
+	
+	/**
+	 * This Method will return an ArrayList containing all the
+	 * Parameters specified inside the {@link Location} Class.
+	 * 
+	 * @param path - FilePath
+	 * @return ArrayList<Location>
+	 */
     public static ArrayList<Location> loadCoordinates(String path) {
         ArrayList<Location> locations = new ArrayList<Location>();
         try {
@@ -12,7 +20,6 @@ public class Reader {
             String line;
             while ((line = br.readLine()) != null) {
             	String[] token = line.split(",");
-                //System.out.println(token[0] + " | "+ token[1]+ " | "+ token[2]);
                 locations.add(new Location(token[0], Double.parseDouble(token[1]),Double.parseDouble(token[2])));
             }
             br.close();

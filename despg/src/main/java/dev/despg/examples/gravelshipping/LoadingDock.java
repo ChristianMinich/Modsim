@@ -9,6 +9,8 @@
  */
 package dev.despg.examples.gravelshipping;
 
+import java.util.Map;
+
 import dev.despg.core.Event;
 import dev.despg.core.EventQueue;
 import dev.despg.core.Randomizer;
@@ -27,7 +29,7 @@ public class LoadingDock extends SimulationObject
 	private static Randomizer loadingWeight;
 	private static Randomizer loadingTime;
 	private static Randomizer dockFailureRepairTime;
-	
+	private static LoadingDocksToWeighingStations ldtws = LoadingDocksToWeighingStations.getInstance();
 	/**
 	 * Constructor for new LoadingDocks, injects its dependency to SimulationObjects
 	 * and creates the required randomizer instances.
@@ -52,12 +54,6 @@ public class LoadingDock extends SimulationObject
 		loadingTime.addProbInt(0.3, 60);
 		loadingTime.addProbInt(0.8, 120);
 		loadingTime.addProbInt(1.0, 180);
-
-		/*//TODO Replace with Shipment
-		drivingToWeighingStation = new Randomizer();
-		drivingToWeighingStation.addProbInt(0.5, 30);
-		drivingToWeighingStation.addProbInt(0.78, 45);
-		drivingToWeighingStation.addProbInt(1.0, 60);*/
 		
 		dockFailureRepairTime = new Randomizer();
 		dockFailureRepairTime.addProbInt(0.8, 0);
@@ -72,6 +68,24 @@ public class LoadingDock extends SimulationObject
 		if (truckCurrentlyLoaded != null)
 			toString += " " + "loading: " + truckCurrentlyLoaded;
 		return toString;
+	}
+	
+	public long ClosestWeighingStation() {
+		long currentSmallestDistance = 0;
+		long currentDistance = 0;
+		WeighingStation currentWeighinstation;
+		for(Map.Entry<LoadingDock, WeighingStation> set :
+           ldtws.entrySet())
+		{
+			currentDistance = Routing.customizableRouting(this.latitude, this.longitude, set.getValue().getLatitude(), set.getValue().getLongitude());
+			if( currentDistance < currentSmallestDistance) {
+				currentSmallestDistance = currentDistance;
+			}
+			
+			/*System.out.println(set.getKey() + " = "
+                    + set.getValue());*/
+		}
+		return currentSmallestDistance;
 	}
 
 	/**
@@ -132,19 +146,17 @@ public class LoadingDock extends SimulationObject
 					&& event.getObjectAttached().getClass() == Truck.class)
 			{
 				eventQueue.remove(event);
-
-				SimulationObject nextEvent = eventQueue.getNextWeighingStation(timeStep, false, null, null, null);
-				WeighingStation ws = (WeighingStation) nextEvent;
-				
-				drivingToWeighingStation = Routing.customizableRouting(this.latitude, this.longitude, 48.77585, 9.18293);
-				
+				ClosestWeighingStation();
+				drivingToWeighingStation = this.ClosestWeighingStation();
+				//drivingToWeighingStation = Routing.customizableRouting(this.latitude, this.longitude, ws.getLatitude(), ws.getLongitude());
+				//drivingToWeighingStation = Routing.customizableRouting(this.latitude, this.longitude, 49.87283, 8.65119);
 				eventQueue.add(new Event(
 						timeStep + event.getObjectAttached().addUtilization(drivingToWeighingStation),
 						GravelLoadingEventTypes.Weighing, truckCurrentlyLoaded, WeighingStation.class, null));
 
 				truckCurrentlyLoaded = null;
 				utilStop(timeStep);
-				// Failure
+				
 				int repairTime = dockFailureRepairTime.nextInt(); 
 				if(repairTime > 0) 
 				{
@@ -152,7 +164,6 @@ public class LoadingDock extends SimulationObject
 					eventQueue.add(new Event(timeStep + repairTime, GravelLoadingEventTypes.DockRepaired,
 							null, null, this));
 				} 
-				// TODO: Tracking Failure Time 
 				
 				return true;
 			}

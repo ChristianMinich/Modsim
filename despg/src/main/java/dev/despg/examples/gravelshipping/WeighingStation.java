@@ -23,7 +23,7 @@ public final class WeighingStation extends SimulationObject
 	private String name;
 	private Truck truckInWeighingStation;
 
-	private static Randomizer drivingToCustomer;
+	private static Long drivingToCustomer;
 	private static EventQueue eventQueue;
 
 	/**
@@ -40,12 +40,6 @@ public final class WeighingStation extends SimulationObject
 		this.longitude = longitude;
 
 		eventQueue = EventQueue.getInstance();
-
-		//TODO Replace with Shipment
-		drivingToCustomer = new Randomizer();
-		drivingToCustomer.addProbInt(0.5, 120);
-		drivingToCustomer.addProbInt(0.8, 150);
-		drivingToCustomer.addProbInt(1.0, 180);
 
 		SimulationObjects.getInstance().add(this);
 	}
@@ -107,17 +101,26 @@ public final class WeighingStation extends SimulationObject
 				GravelShipping.setGravelToShip(GravelShipping.getGravelToShip() + truckToWeighLoad);
 				GravelShipping.increaseUnsuccessfulLoadingSizes(truckToWeighLoad);
 				GravelShipping.increaseUnsuccessfulLoadings();
-				driveToLoadingStation = truckInWeighingStation.addUtilization(drivingToCustomer.nextInt());
+
+				
+				//drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, sp.getLatitude(), sp.getLongitude());
+					drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, 52.37589, 9.73201);
+				driveToLoadingStation = truckInWeighingStation.addUtilization(drivingToCustomer);
 			}
 			else
 			{
 				GravelShipping.increaseGravelShipped(truckToWeighLoad);
 				GravelShipping.increaseSuccessfulLoadingSizes(truckToWeighLoad);
 				GravelShipping.increaseSuccessfulLoadings();
-				driveToLoadingStation = truckInWeighingStation.addUtilization(drivingToCustomer.nextInt());
+				
+				
+				//drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, sp.getLatitude(), sp.getLongitude());
+					drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, 52.37589, 9.73201);
+				driveToLoadingStation = truckInWeighingStation.addUtilization(drivingToCustomer);
 			}
-			eventQueue.add(new Event(timeStep + driveToLoadingStation, GravelLoadingEventTypes.Loading,
-					truckInWeighingStation, LoadingDock.class, null));
+			
+			eventQueue.add(new Event(timeStep + driveToLoadingStation, GravelLoadingEventTypes.Unloading,
+					truckInWeighingStation, Shipment.class, null));
 
 			truckInWeighingStation.unload();
 			truckInWeighingStation = null;
