@@ -67,11 +67,8 @@ public class Shipment extends SimulationObject{
 				truckCurrentlyLoaded = (Truck) event.getObjectAttached();
 				truckCurrentlyLoaded.unload();
 				
-				SimulationObject nextLoadingDock = eventQueue.getNextLoadingDock(timeStep);
-				LoadingDock ld = (LoadingDock) nextLoadingDock;
-				
-				drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, ld.getLatitude(), ld.getLongitude());
-				eventQueue.add(new Event(timeStep + truckCurrentlyLoaded.addUtilization(unloadingTime.nextInt() + drivingToLoadingDock),
+				//drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, ld.getLatitude(), ld.getLongitude());
+				eventQueue.add(new Event(timeStep + truckCurrentlyLoaded.addUtilization(unloadingTime.nextInt()),
 						GravelLoadingEventTypes.UnloadingDone, truckCurrentlyLoaded, null, this));
 
 				utilStart(timeStep);
@@ -86,14 +83,11 @@ public class Shipment extends SimulationObject{
 			{
 				eventQueue.remove(event);
 
-				SimulationObject nextLoadingDock = eventQueue.getNextLoadingDock(timeStep);
-				LoadingDock ld = (LoadingDock) nextLoadingDock;
-				
-				drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, ld.getLatitude(), ld.getLongitude());
-				GravelShipping.increaseSuccessfulUnloadings();
+				//drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, ld.getLatitude(), ld.getLongitude());
+				drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, 48.77585, 9.18293);
 				eventQueue.add(new Event(
 						timeStep + event.getObjectAttached().addUtilization(drivingToLoadingDock),
-						GravelLoadingEventTypes.Unloading, truckCurrentlyLoaded, LoadingDock.class, null));
+						GravelLoadingEventTypes.Loading, truckCurrentlyLoaded, LoadingDock.class, null));
 
 				truckCurrentlyLoaded = null;
 				utilStop(timeStep);		

@@ -37,5 +37,13 @@ public final class LoadingDocksToWeighingStations extends HashMap<LoadingDock, W
 	{
 		return Inner.loadingDocksToWeighingStations;
 	}
-}
+	
+	/*public void RouteCalculation () {		
+			LoadingDocksToWeighingStations.entrySet().forEach(entry -> {
+			    System.out.println(entry.getKey() + " " + entry.getValue());
+			});*/
+		
+	}
 
+
+	

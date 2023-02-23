@@ -10,6 +10,7 @@
 package dev.despg.examples.gravelshipping;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,8 +51,11 @@ public class GravelShipping extends Simulation
 	private static ArrayList<Location> LOADING_DOCK_LOCATION = Reader.loadCoordinates(pathLoadingdocks);
 	private static ArrayList<Location> WEIGHING_LOCATION = Reader.loadCoordinates(pathWeighingstation);
 	private static ArrayList<Location> DESTINATION_LOCATION = Reader.loadCoordinates(pathDestinations);
-
-	private static ArrayList<SimulationObject> firstWeighingStation = new ArrayList<SimulationObject>();
+	
+	
+	static {
+		
+	}
 	/**
 	 * Defines the setup of simulation objects and starting events before executing
 	 * the simulation. Prints utilization statistics afterwards
@@ -77,7 +81,7 @@ public class GravelShipping extends Simulation
 		
 		/*TODO
          * 
-         * 1. Alle Ladedocks abfragen (eigene Speicehrstruktur mit Ladedocks als singleton/ über alle SimObjekte filtern)
+         * 1. Alle Ladedocks abfragen (eigene Speicehrstruktur mit Ladedocks als singleton OR über alle SimObjekte filtern)
          * 2. Distanzen zwischen dem LoadingDock und allen Weighingstation 
          * 3. günstigste Distanz zwischen dem Ladedock und der Weighstaion speichern (Loadingdocktoweighingstation)
          * 4. Algorithmus ändern (anpassen nächste weighingstation nehmen
@@ -88,6 +92,8 @@ public class GravelShipping extends Simulation
 			new Shipment("SP " + DESTINATION_LOCATION.get(i).getName(), DESTINATION_LOCATION.get(i).getLatitude(), DESTINATION_LOCATION.get(i).getLongitude());
 
 		GravelShipping gs = new GravelShipping();
+		LoadingDocksToWeighingStations ldtws = LoadingDocksToWeighingStations.getInstance();
+		System.out.println(Arrays.asList(ldtws));
 		long timeStep = gs.simulate();
 
 		// output some statistics after simulation run
@@ -133,11 +139,6 @@ public class GravelShipping extends Simulation
 
 		logger.log(Level.INFO, time + " " + shipped + "\n " + eventQueue
 				+ " #Trucks Loading Queue: " + numberOfTrucksLoadingQueue + ", # Trucks Weighing Queue: " + numberOfTrucksWeighingQueue + " ," + numberOfTrucksUnloadingQueue);
-	}
-	
-	public static SimulationObject getFirstWeighingStation()
-	{
-		return firstWeighingStation.get(0);
 	}
 
 	public static Integer getGravelToShip()

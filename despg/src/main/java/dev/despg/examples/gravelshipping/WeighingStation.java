@@ -101,13 +101,10 @@ public final class WeighingStation extends SimulationObject
 				GravelShipping.setGravelToShip(GravelShipping.getGravelToShip() + truckToWeighLoad);
 				GravelShipping.increaseUnsuccessfulLoadingSizes(truckToWeighLoad);
 				GravelShipping.increaseUnsuccessfulLoadings();
+
 				
-				SimulationObject nextEvent = eventQueue.getNextShipment(timeStep);
-				
-				Shipment sp = (Shipment) nextEvent;
-				
-				drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, sp.getLatitude(), sp.getLongitude());
-				
+				//drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, sp.getLatitude(), sp.getLongitude());
+					drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, 52.37589, 9.73201);
 				driveToLoadingStation = truckInWeighingStation.addUtilization(drivingToCustomer);
 			}
 			else
@@ -116,17 +113,14 @@ public final class WeighingStation extends SimulationObject
 				GravelShipping.increaseSuccessfulLoadingSizes(truckToWeighLoad);
 				GravelShipping.increaseSuccessfulLoadings();
 				
-				SimulationObject nextEvent = eventQueue.getNextShipment(timeStep);
 				
-				Shipment sp = (Shipment) nextEvent;
-				
-				drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, sp.getLatitude(), sp.getLongitude());
-				
+				//drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, sp.getLatitude(), sp.getLongitude());
+					drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, 52.37589, 9.73201);
 				driveToLoadingStation = truckInWeighingStation.addUtilization(drivingToCustomer);
 			}
 			
-			eventQueue.add(new Event(timeStep + driveToLoadingStation, GravelLoadingEventTypes.Loading,
-					truckInWeighingStation, LoadingDock.class, null));
+			eventQueue.add(new Event(timeStep + driveToLoadingStation, GravelLoadingEventTypes.Unloading,
+					truckInWeighingStation, Shipment.class, null));
 
 			truckInWeighingStation.unload();
 			truckInWeighingStation = null;
