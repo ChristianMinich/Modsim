@@ -31,6 +31,7 @@ public final class LoadingDocksToWeighingStations extends HashMap<LoadingDock, W
 	{
 		private static LoadingDocksToWeighingStations loadingDocksToWeighingStations = new LoadingDocksToWeighingStations();
 	}
+	
 
 	//TODO
 	public static LoadingDocksToWeighingStations getInstance()

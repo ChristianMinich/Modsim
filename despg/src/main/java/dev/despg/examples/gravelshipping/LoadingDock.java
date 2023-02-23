@@ -73,17 +73,18 @@ public class LoadingDock extends SimulationObject
 	public long ClosestWeighingStation() {
 		long currentSmallestDistance = 0;
 		long currentDistance = 0;
-		WeighingStation currentWeighinstation;
 		for(Map.Entry<LoadingDock, WeighingStation> set :
            ldtws.entrySet())
 		{
+			System.out.println(set.getKey());
 			currentDistance = Routing.customizableRouting(this.latitude, this.longitude, set.getValue().getLatitude(), set.getValue().getLongitude());
 			if( currentDistance < currentSmallestDistance) {
 				currentSmallestDistance = currentDistance;
+				
 			}
 			
 			/*System.out.println(set.getKey() + " = "
-                    + set.getValue());*/
+                    + set.getValue()); */
 		}
 		return currentSmallestDistance;
 	}
@@ -146,7 +147,7 @@ public class LoadingDock extends SimulationObject
 					&& event.getObjectAttached().getClass() == Truck.class)
 			{
 				eventQueue.remove(event);
-				ClosestWeighingStation();
+				
 				drivingToWeighingStation = this.ClosestWeighingStation();
 				//drivingToWeighingStation = Routing.customizableRouting(this.latitude, this.longitude, ws.getLatitude(), ws.getLongitude());
 				//drivingToWeighingStation = Routing.customizableRouting(this.latitude, this.longitude, 49.87283, 8.65119);

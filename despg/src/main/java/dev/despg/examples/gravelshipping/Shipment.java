@@ -10,6 +10,8 @@
  */
 package dev.despg.examples.gravelshipping;
 
+import java.util.Map;
+
 import dev.despg.core.Event;
 import dev.despg.core.EventQueue;
 import dev.despg.core.Randomizer;
@@ -23,6 +25,8 @@ public class Shipment extends SimulationObject{
 	private static EventQueue eventQueue;
 	private static Randomizer unloadingTime;
 	private static Long drivingToLoadingDock;
+	
+	private static ShipmentsToLoadingDocks stld = ShipmentsToLoadingDocks.getInstance();
 	
 	public Shipment(String name, Double latitude, Double longitude)
 	{
@@ -49,6 +53,26 @@ public class Shipment extends SimulationObject{
 			toString += " " + "shipping with: " + truckCurrentlyLoaded;
 		return toString;
 	}
+	
+	public long ClosestLoadingDock() {
+		long currentSmallestDistance = 0;
+		long currentDistance = 0;
+		for(Map.Entry<Shipment, LoadingDock> set :
+			stld.entrySet())
+		{
+			System.out.println(set.getKey());
+			currentDistance = Routing.customizableRouting(this.latitude, this.longitude, set.getValue().getLatitude(), set.getValue().getLongitude());
+			if( currentDistance < currentSmallestDistance) {
+				currentSmallestDistance = currentDistance;
+				
+			}
+			
+			/*System.out.println(set.getKey() + " = "
+                    + set.getValue());*/
+		}
+		return currentSmallestDistance;
+	}
+	
 	/**
 	 * @param timeStep
 	 * @return true, if an Event has been processed - false, if it failed to process an Event.
@@ -67,7 +91,6 @@ public class Shipment extends SimulationObject{
 				truckCurrentlyLoaded = (Truck) event.getObjectAttached();
 				truckCurrentlyLoaded.unload();
 				
-				//drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, ld.getLatitude(), ld.getLongitude());
 				eventQueue.add(new Event(timeStep + truckCurrentlyLoaded.addUtilization(unloadingTime.nextInt()),
 						GravelLoadingEventTypes.UnloadingDone, truckCurrentlyLoaded, null, this));
 
@@ -83,8 +106,9 @@ public class Shipment extends SimulationObject{
 			{
 				eventQueue.remove(event);
 
+				drivingToLoadingDock = this.ClosestLoadingDock();
 				//drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, ld.getLatitude(), ld.getLongitude());
-				drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, 48.77585, 9.18293);
+				//drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, 48.77585, 9.18293);
 				eventQueue.add(new Event(
 						timeStep + event.getObjectAttached().addUtilization(drivingToLoadingDock),
 						GravelLoadingEventTypes.Loading, truckCurrentlyLoaded, LoadingDock.class, null));
