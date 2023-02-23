@@ -33,10 +33,12 @@ public final class WeighingStation extends SimulationObject
 
 
 	/**
-	 * Constructor for new WeightingStations, injects its dependency to
+	 * Constructor for new WeighingStations, injects its dependency to
 	 * SimulationObjects and creates the required randomizer instances.
 	 *
-	 * @param name Name of the WeightingStation instance
+	 * @param name - Name of the WeighingStation instance
+	 * @param latitude - Latitude of the WeighingStation instance
+	 * @param longitude - Longitude of the WeighingStation instance
 	 */
 	public WeighingStation(String name, Double latitude, Double longitude)
 	{
@@ -64,7 +66,11 @@ public final class WeighingStation extends SimulationObject
 		return toString;
 	}
 	
-	// Shipment as alternative
+	/**
+	 * Calculates the Time it takes to drive from this Weighing Station instance 
+	 * to the closest {@link Shipment} instance.
+	 * @return long - Time to closest {@link Shipment} in Minutes.
+	 */
 	public long ClosestShipment() {
 		long currentSmallestDistance = 0;
 		long currentDistance = 0;
@@ -86,6 +92,7 @@ public final class WeighingStation extends SimulationObject
 		}
 		return currentSmallestDistance;
 	}
+	
 	/**
 	 * Gets called every timeStep
 	 *
@@ -101,8 +108,8 @@ public final class WeighingStation extends SimulationObject
 	 * case the event gets removed from the queue and handled by checking if trucks
 	 * load is above the maximum allowed load or not. If it is above, it will count
 	 * as an unsuccessful loading, else it will count ass successful and be shipped.
-	 * In either case there will be a new event added to the event queue with no
-	 * difference in parameters.
+	 * In either case there will be a new event added to the event queue with Parameter
+	 * "Unloading" assigned for the {@link Shipment} Class.
 	 *
 	 * @return true if an assignable event got found and handled, false if no event
 	 *         could get assigned

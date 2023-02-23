@@ -34,7 +34,9 @@ public class LoadingDock extends SimulationObject
 	 * Constructor for new LoadingDocks, injects its dependency to SimulationObjects
 	 * and creates the required randomizer instances.
 	 *
-	 * @param name Name of the LoadingDock instance
+	 * @param name - Name of the LoadingDock instance
+	 * @param latitude - Latitude of the Loading Dock instance
+	 * @param longitude - Longitude of the Loading Dock instance
 	 */
 	public LoadingDock(String name, Double latitude, Double longitude)
 	{
@@ -70,6 +72,11 @@ public class LoadingDock extends SimulationObject
 		return toString;
 	}
 	
+	/**
+	 * Calculates the Time it takes to drive from this Loading Dock instance 
+	 * to the closest {@link WeighingStation} instance.
+	 * @return long - Time to closest {@link WeighingStation} in Minutes.
+	 */
 	public long ClosestWeighingStation() {
 		long currentSmallestDistance = 0;
 		long currentDistance = 0;

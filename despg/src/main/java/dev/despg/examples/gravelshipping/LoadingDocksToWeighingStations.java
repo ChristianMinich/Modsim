@@ -13,7 +13,10 @@ import java.util.HashMap;
 import java.util.logging.Logger;
  
 
-//TODO
+/**
+ * Maintains a HashMap of every initialized {@link LoadingDock} as a key with
+ * it's corresponding {@link WeighingStation} as it's value.
+ */
 public final class LoadingDocksToWeighingStations extends HashMap<LoadingDock, WeighingStation>
 {
 	private static Logger logger = Logger.getLogger("dev.despg.examples.gravelshipping.LoadingDocksToWeighingStations");
@@ -26,14 +29,22 @@ public final class LoadingDocksToWeighingStations extends HashMap<LoadingDock, W
 		super(MAX_LOCATIONS);
 	}
 
-	//TODO
+	/**
+	 * Initializes {@link LoadingDocksToWeighingStations} inside the Inner Class
+	 * creating a Singleton instance of itself.
+	 *
+	 */
 	private static class Inner
 	{
 		private static LoadingDocksToWeighingStations loadingDocksToWeighingStations = new LoadingDocksToWeighingStations();
 	}
 	
 
-	//TODO
+	/**
+	 * Gets the instance of {@link LoadingDocksToWeighingStations}.
+	 *
+	 * @return The Singleton instance of {@link LoadingDocksToWeighingStations}
+	 */
 	public static LoadingDocksToWeighingStations getInstance()
 	{
 		return Inner.loadingDocksToWeighingStations;

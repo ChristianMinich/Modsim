@@ -28,6 +28,14 @@ public class Shipment extends SimulationObject{
 	
 	private static ShipmentsToLoadingDocks stld = ShipmentsToLoadingDocks.getInstance();
 	
+	/**
+	 * Constructor for new Shipments, injects its dependency to SimulationObjects
+	 * and creates the required randomizer instances.
+	 *
+	 * @param name
+	 * @param latitude
+	 * @param longitude
+	 */
 	public Shipment(String name, Double latitude, Double longitude)
 	{
 		this.name = name;
@@ -54,6 +62,12 @@ public class Shipment extends SimulationObject{
 		return toString;
 	}
 	
+	/**
+	 * Calculates the Time it takes to drive from this Shipment instance 
+	 * to the closest {@link LoadingDock} instance.
+	 * 
+	 * @return long - Time to closest {@link LoadingDock} in Minutes.
+	 */
 	public long ClosestLoadingDock() {
 		long currentSmallestDistance = 0;
 		long currentDistance = 0;
@@ -74,8 +88,24 @@ public class Shipment extends SimulationObject{
 	}
 	
 	/**
-	 * @param timeStep
-	 * @return true, if an Event has been processed - false, if it failed to process an Event.
+	 * Gets called every timeStep.
+	 *
+	 * If it is not currently occupied ({@link #truckCurrentlyLoaded} == null) and
+	 * the simulation goal still is not archived, it checks if there is an event in
+	 * the queue that got assigned to this class with the correct event description.
+	 * Then proceeds in checking if the attached object is indeed a Truck. In that
+	 * case the event gets removed from the queue and the event will get handled:
+	 * {@link #truckCurrentlyLoaded} is set to the events attached object, and the
+	 * truck gets unloaded. Adds a new event to the event queue for when the unloading
+	 * is done and returns true.
+	 *
+	 * When the unloading is done, it grabs the corresponding event from the event
+	 * queue and handles it by removing it from the queue, setting
+	 * {@link truckCurrentlyLoaded} to null and adding a new event to the event
+	 * queue assigned to the {@link LoadingDock} class.
+	 *
+	 * @return true if an assignable event got found and handled, false if no event
+	 *         could get assigned
 	 */
 	@Override
 	public boolean simulate(long timeStep) {
