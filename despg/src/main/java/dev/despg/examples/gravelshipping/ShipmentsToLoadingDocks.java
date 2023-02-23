@@ -9,16 +9,8 @@
  */
 package dev.despg.examples.gravelshipping;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import dev.despg.core.SimulationObject;
-import dev.despg.examples.gravelshipping.GravelLoadingEventTypes;
-import dev.despg.examples.gravelshipping.WeighingStation;
- 
 
 
 //TODO

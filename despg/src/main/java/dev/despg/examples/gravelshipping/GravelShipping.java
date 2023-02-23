@@ -75,6 +75,15 @@ public class GravelShipping extends Simulation
 		for (int i = 0; i < NUM_WEIGHING_STATIONS; i++)
 			new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude());
 		
+		/*TODO
+         * 
+         * 1. Alle Ladedocks abfragen (eigene Speicehrstruktur mit Ladedocks als singleton/ über alle SimObjekte filtern)
+         * 2. Distanzen zwischen dem LoadingDock und allen Weighingstation 
+         * 3. günstigste Distanz zwischen dem Ladedock und der Weighstaion speichern (Loadingdocktoweighingstation)
+         * 4. Algorithmus ändern (anpassen nächste weighingstation nehmen
+         * 5. 
+         * 
+         * */
 		for (int i = 0; i < NUM_SHIPMENTS; i++)
 			new Shipment("SP " + DESTINATION_LOCATION.get(i).getName(), DESTINATION_LOCATION.get(i).getLatitude(), DESTINATION_LOCATION.get(i).getLongitude());
 
