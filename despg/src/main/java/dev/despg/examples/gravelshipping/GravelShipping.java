@@ -51,7 +51,7 @@ public class GravelShipping extends Simulation
 	private static ArrayList<Location> WEIGHING_LOCATION = Reader.loadCoordinates(pathWeighingstation);
 	private static ArrayList<Location> DESTINATION_LOCATION = Reader.loadCoordinates(pathDestinations);
 
-	private static ArrayList<SimulationObject> FirstWeighingStation;
+	private static ArrayList<SimulationObject> firstWeighingStation = new ArrayList<SimulationObject>();
 	/**
 	 * Defines the setup of simulation objects and starting events before executing
 	 * the simulation. Prints utilization statistics afterwards
@@ -73,7 +73,7 @@ public class GravelShipping extends Simulation
 		for (int i = 0; i < NUM_WEIGHING_STATIONS; i++) {
 			new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude());
 			while(i < 1) {
-				FirstWeighingStation.add(new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude()));
+				firstWeighingStation.add(new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude()));
 			}
 		}
 		
@@ -130,7 +130,7 @@ public class GravelShipping extends Simulation
 	
 	public static SimulationObject getFirstWeighingStation()
 	{
-		return FirstWeighingStation.get(0);
+		return firstWeighingStation.get(0);
 	}
 
 	public static Integer getGravelToShip()
