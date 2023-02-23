@@ -70,12 +70,10 @@ public class GravelShipping extends Simulation
 		for (int i = 0; i < NUM_LOADING_DOCKS; i++)
 			new LoadingDock("LD " + LOADING_DOCK_LOCATION.get(i).getName(), LOADING_DOCK_LOCATION.get(i).getLatitude(), LOADING_DOCK_LOCATION.get(i).getLongitude());
 
-		for (int i = 0; i < NUM_WEIGHING_STATIONS; i++) {
+		// TODO
+		// Calculate Distance from Loading Docks to Weighing Station
+		for (int i = 0; i < NUM_WEIGHING_STATIONS; i++)
 			new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude());
-			while(i < 1) {
-				firstWeighingStation.add(new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude()));
-			}
-		}
 		
 		for (int i = 0; i < NUM_SHIPMENTS; i++)
 			new Shipment("SP " + DESTINATION_LOCATION.get(i).getName(), DESTINATION_LOCATION.get(i).getLatitude(), DESTINATION_LOCATION.get(i).getLongitude());
