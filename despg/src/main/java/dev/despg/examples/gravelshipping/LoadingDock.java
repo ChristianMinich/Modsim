@@ -22,7 +22,6 @@ public class LoadingDock extends SimulationObject
 	private String name;
 	private Truck truckCurrentlyLoaded;
 	private Boolean dockFailed = false;
-	private static Long drivingToWeighingStation;
 
 	private static EventQueue eventQueue;
 
@@ -34,7 +33,9 @@ public class LoadingDock extends SimulationObject
 	 * Constructor for new LoadingDocks, injects its dependency to SimulationObjects
 	 * and creates the required randomizer instances.
 	 *
-	 * @param name Name of the LoadingDock instance
+	 * @param name - Name of the LoadingDock instance
+	 * @param latitude - Latitude of the Loading Dock instance
+	 * @param longitude - Longitude of the Loading Dock instance
 	 */
 	public LoadingDock(String name, Double latitude, Double longitude)
 	{
@@ -70,24 +71,6 @@ public class LoadingDock extends SimulationObject
 		return toString;
 	}
 	
-	public long ClosestWeighingStation() {
-		long currentSmallestDistance = 0;
-		long currentDistance = 0;
-		WeighingStation currentWeighinstation;
-		for(Map.Entry<LoadingDock, WeighingStation> set :
-           ldtws.entrySet())
-		{
-			currentDistance = Routing.customizableRouting(this.latitude, this.longitude, set.getValue().getLatitude(), set.getValue().getLongitude());
-			if( currentDistance < currentSmallestDistance) {
-				currentSmallestDistance = currentDistance;
-			}
-			
-			/*System.out.println(set.getKey() + " = "
-                    + set.getValue());*/
-		}
-		return currentSmallestDistance;
-	}
-
 	/**
 	 * Gets called every timeStep.
 	 *
@@ -146,13 +129,13 @@ public class LoadingDock extends SimulationObject
 					&& event.getObjectAttached().getClass() == Truck.class)
 			{
 				eventQueue.remove(event);
-				ClosestWeighingStation();
-				drivingToWeighingStation = this.ClosestWeighingStation();
+				
+				WeighingStationWithDistance drivingToWeighingStation = ldtws.get(this);
 				//drivingToWeighingStation = Routing.customizableRouting(this.latitude, this.longitude, ws.getLatitude(), ws.getLongitude());
 				//drivingToWeighingStation = Routing.customizableRouting(this.latitude, this.longitude, 49.87283, 8.65119);
 				eventQueue.add(new Event(
-						timeStep + event.getObjectAttached().addUtilization(drivingToWeighingStation),
-						GravelLoadingEventTypes.Weighing, truckCurrentlyLoaded, WeighingStation.class, null));
+						timeStep + event.getObjectAttached().addUtilization(drivingToWeighingStation.getDrivingTime()),
+						GravelLoadingEventTypes.Weighing, truckCurrentlyLoaded, null, drivingToWeighingStation.getWeighingStation()));
 
 				truckCurrentlyLoaded = null;
 				utilStop(timeStep);

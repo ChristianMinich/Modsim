@@ -6,7 +6,6 @@
  *
  * see LICENSE
  * 
- * @author Christian Minich
  */
 package dev.despg.examples.gravelshipping;
 
@@ -29,60 +28,69 @@ import static com.graphhopper.json.Statement.If;
 import static com.graphhopper.json.Statement.Op.LIMIT;
 import static com.graphhopper.json.Statement.Op.MULTIPLY;
 
+
 public class Routing {
+	
+	private static GraphHopper hopper = new GraphHopper();
+	
+	/**
+	 * This Method calculates the Time it takes to drive from one {@link Location} to another one
+	 * using the Parameters Latitude and Longitude and returns it as a Long that represents the
+	 * Time utilized in Minutes.
+	 * 
+	 * @param fromLat - From Latitude
+	 * @param fromLon - From Longitude
+	 * @param toLat - To Latitude
+	 * @param toLo - To Longitude
+	 * @return Long - timeInMinutes
+	 */
 	public static Long customizableRouting(double fromLat, double fromLon, double toLat, double toLo) {
-		GraphHopper hopper = new GraphHopper();
+		
 		//############ Bitte den für euch passenden Befehl aktivieren und den rest nur auskommentieren und NICHT löschen. 
 		//hopper.setOSMFile("" + "C:/Users/andre/Documents/GitHub/Modsim/despg/src/despgutils/germany-latest.osm.pbf");
-		hopper.setOSMFile("C:/Users/andre/Documents/GitHub/Modsim/despg/src/despgutils/germany-latest.osm.pbf");
+		hopper.setOSMFile("D:/Modsimsafety/Cache/germany-latest.osm.pbf");
 		hopper.setGraphHopperLocation("D:/Modsimsafety/Cache/routing-custom-graph-cache");
 		//hopper.setGraphHopperLocation("/Users/rene/Desktop/Studium/HS-Osnabrueck/Eclipse/OSM-files.nosync/routing-custom-graph-cache");
+		// Chris
+		//hopper.setOSMFile("C:/Users/chris/Desktop/javatest/germany-latest.osm.pbf");
+		//hopper.setGraphHopperLocation("C:/Users/chris/Desktop/javatest/cache");
 		
+		// Set and Load the Profile
 		hopper.setProfiles(new CustomProfile("car_custom").setCustomModel(new CustomModel()).setVehicle("car"));
-
 		hopper.getLMPreparationHandler().setLMProfiles(new LMProfile("car_custom"));
 		hopper.importOrLoad();
 
+		// Creates a Request containing the Latitude and Longitude from Start to Finish
 		GHRequest req = new GHRequest().setProfile("car_custom").
 				addPoint(new GHPoint(fromLat, fromLon)).addPoint(new GHPoint(toLat, toLo));
 
-		GHResponse res = hopper.route(req);
+		// Calculate the Route
+		/*GHResponse res = hopper.route(req);
 		if (res.hasErrors())
-			throw new RuntimeException(res.getErrors().toString());
+			throw new RuntimeException(res.getErrors().toString()); */
 
-		assert Math.round(res.getBest().getTime() / 1000d) == 96;
+		//assert Math.round(res.getBest().getTime() / 1000d) == 96;
 
-		// 2. now avoid primary roads and reduce maximum speed, see docs/core/custom-models.md for an in-depth explanation
-		// and also the blog posts https://www.graphhopper.com/?s=customizable+routing
-
+		// Create a new Custom Model simulating a Truck
 		CustomModel model = new CustomModel();
-		model.addToPriority(If("road_class == PRIMARY", MULTIPLY, "0.9"));
 
-		// unconditional limit to 100km/h
-		model.addToPriority(If("true", LIMIT, "100"));
+		// LIMIT MAXIMUM SPEED TO 80 KM/H
+		model.addToPriority(If("true", LIMIT, "80"));
 
+		// Sets the Custom Model to be used as the Simulation Model
 		req.setCustomModel(model);
-		res = hopper.route(req);
+		GHResponse res = hopper.route(req);
 		if (res.hasErrors())
 			throw new RuntimeException(res.getErrors().toString());
 
 		assert Math.round(res.getBest().getTime() / 1000d) == 165;
 
+		// Calculate the best Path based on the Model
 		ResponsePath path = res.getBest();
 
-		PointList pointList = path.getPoints();
-		double distance = path.getDistance();
+		// Calculate the time neccessary to  
 		long timeInMs = path.getTime();
 
-		System.out.println(distance + " " + (((timeInMs / 1000) / 60)) + " Time in Minutes");
-		Translation tr = hopper.getTranslationMap().getWithFallBack(Locale.ENGLISH);
-
-		InstructionList il = path.getInstructions();
-		// iterate over all turn instructions
-		/*for (Instruction instruction : il) {
-			System.out.println("distance " + Math.round(instruction.getDistance()) + 
-					" for instruction: " + instruction.getName() + " " + instruction.getTurnDescription(tr) + " Time: " + (instruction.getTime() / 1000) + " seconds");
-		}*/
 		hopper.close();
 		return ((timeInMs / 1000) / 60); // Conversion from Ms to Minutes.
 	}}
