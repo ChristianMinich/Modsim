@@ -48,12 +48,12 @@ public class Routing {
 		
 		//############ Bitte den für euch passenden Befehl aktivieren und den rest nur auskommentieren und NICHT löschen. 
 		//hopper.setOSMFile("" + "C:/Users/andre/Documents/GitHub/Modsim/despg/src/despgutils/germany-latest.osm.pbf");
-		//hopper.setOSMFile("D:/Modsimsafety/Cache/germany-latest.osm.pbf");
-		//hopper.setGraphHopperLocation("D:/Modsimsafety/Cache/routing-custom-graph-cache");
+		hopper.setOSMFile("D:/Modsimsafety/Cache/germany-latest.osm.pbf");
+		hopper.setGraphHopperLocation("D:/Modsimsafety/Cache/routing-custom-graph-cache");
 		//hopper.setGraphHopperLocation("/Users/rene/Desktop/Studium/HS-Osnabrueck/Eclipse/OSM-files.nosync/routing-custom-graph-cache");
 		// Chris
-		hopper.setOSMFile("C:/Users/chris/Desktop/javatest/germany-latest.osm.pbf");
-		hopper.setGraphHopperLocation("C:/Users/chris/Desktop/javatest/cache");
+		//hopper.setOSMFile("C:/Users/chris/Desktop/javatest/germany-latest.osm.pbf");
+		//hopper.setGraphHopperLocation("C:/Users/chris/Desktop/javatest/cache");
 		
 		// Set and Load the Profile
 		hopper.setProfiles(new CustomProfile("car_custom").setCustomModel(new CustomModel()).setVehicle("car"));

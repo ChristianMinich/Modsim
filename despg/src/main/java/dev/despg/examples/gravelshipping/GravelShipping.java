@@ -46,6 +46,7 @@ public class GravelShipping extends Simulation
 	private static ArrayList<Location> WEIGHING_LOCATION = Reader.loadCoordinates(pathWeighingstation);
 	private static ArrayList<Location> DESTINATION_LOCATION = Reader.loadCoordinates(pathDestinations);
 	
+	private static LoadingDocksToWeighingStations ldtws = LoadingDocksToWeighingStations.getInstance();
 	
 	static {
 		
@@ -59,18 +60,42 @@ public class GravelShipping extends Simulation
 	public static void main(String[] args)
 	{
 		EventQueue eventqueue = EventQueue.getInstance();
+		ArrayList<LoadingDock> loadingDocks = new ArrayList<LoadingDock>();
+		ArrayList<WeighingStation> weighingStations = new ArrayList<WeighingStation>();
 		
 		System.out.println(eventqueue);
 
 		for (int i = 0; i < NUM_TRUCKS; i++)
 			eventqueue.add(new Event(0L, GravelLoadingEventTypes.Loading, new Truck("T" + i), LoadingDock.class, null));
 
-		for (int i = 0; i < NUM_LOADING_DOCKS; i++)
-			new LoadingDock("LD " + LOADING_DOCK_LOCATION.get(i).getName(), LOADING_DOCK_LOCATION.get(i).getLatitude(), LOADING_DOCK_LOCATION.get(i).getLongitude());
+		for (int i = 0; i < NUM_LOADING_DOCKS; i++) 
+			loadingDocks.add(new LoadingDock("LD " + LOADING_DOCK_LOCATION.get(i).getName(), LOADING_DOCK_LOCATION.get(i).getLatitude(), LOADING_DOCK_LOCATION.get(i).getLongitude()));
 
 		for (int i = 0; i < NUM_WEIGHING_STATIONS; i++)
-			new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude());
+			weighingStations.add(new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude()));
+			
 		
+		for (LoadingDock loadingDock : loadingDocks) 
+		{
+			
+			Long closestDrivingTimeToWeighingStation = Long.MAX_VALUE;
+			WeighingStation closestWeighingStation = null;
+			
+			for (WeighingStation weighingStation : weighingStations) 
+			{
+				long drivingTimeToWeighingStation = Routing.customizableRouting(loadingDock.getLatitude(), loadingDock.getLongitude(), weighingStation.getLatitude(), weighingStation.getLongitude());
+		
+				if(drivingTimeToWeighingStation < closestDrivingTimeToWeighingStation) 
+				{
+					closestDrivingTimeToWeighingStation = drivingTimeToWeighingStation;
+					closestWeighingStation = weighingStation;
+				}
+			}
+			
+			ldtws.put(loadingDock, new WeighingStationWithDistance(closestWeighingStation, closestDrivingTimeToWeighingStation));
+		}
+		
+
 		/*TODO
          * 
          * 1. Alle Ladedocks abfragen (eigene Speicehrstruktur mit Ladedocks als singleton OR über alle SimObjekte filtern)
