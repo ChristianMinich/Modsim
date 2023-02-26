@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * Maintains a HashMap of every initialized {@link WeighingStation} as a key with
  * it's corresponding {@link Shipment} as it's value.
  */
-public final class WeighingStationsToShipments extends HashMap<WeighingStation, Shipment>
+public final class WeighingStationsToShipments extends HashMap<WeighingStation, ShipmentWithDistance>
 {
 	private static Logger logger = Logger.getLogger("dev.despg.examples.gravelshipping.WeighingStationsToShipments");
 

@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  * Maintains a HashMap of every initialized {@link Shipment} as a key with
  * it's corresponding {@link LoadingDock} as it's value.
  */
-public final class ShipmentsToLoadingDocks extends HashMap<Shipment, LoadingDock>
+public final class ShipmentsToLoadingDocks extends HashMap<Shipment, LoadingDockWithDistance>
 {
 	private static Logger logger = Logger.getLogger("dev.despg.examples.gravelshipping.ShipmentsToLoadingDocks");
 

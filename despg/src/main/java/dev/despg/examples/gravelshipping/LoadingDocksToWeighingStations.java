@@ -10,8 +10,7 @@
 package dev.despg.examples.gravelshipping;
 
 import java.util.HashMap;
-import java.util.logging.Logger;
- 
+
 
 /**
  * Maintains a HashMap of every initialized {@link LoadingDock} as a key with
@@ -19,7 +18,6 @@ import java.util.logging.Logger;
  */
 public final class LoadingDocksToWeighingStations extends HashMap<LoadingDock, WeighingStationWithDistance>
 {
-	private static Logger logger = Logger.getLogger("dev.despg.examples.gravelshipping.LoadingDocksToWeighingStations");
 
 	private static final long serialVersionUID = 1L;
 	private static final int MAX_LOCATIONS = 10000;
@@ -38,7 +36,7 @@ public final class LoadingDocksToWeighingStations extends HashMap<LoadingDock, W
 	{
 		private static LoadingDocksToWeighingStations loadingDocksToWeighingStations = new LoadingDocksToWeighingStations();
 	}
-	
+
 
 	/**
 	 * Gets the instance of {@link LoadingDocksToWeighingStations}.
@@ -49,13 +47,8 @@ public final class LoadingDocksToWeighingStations extends HashMap<LoadingDock, W
 	{
 		return Inner.loadingDocksToWeighingStations;
 	}
-	
-	/*public void RouteCalculation () {		
-			LoadingDocksToWeighingStations.entrySet().forEach(entry -> {
-			    System.out.println(entry.getKey() + " " + entry.getValue());
-			});*/
-		
+
+
 	}
 
 
-	

@@ -14,11 +14,6 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import dev.despg.examples.gravelshipping.GravelLoadingEventTypes;
-import dev.despg.examples.gravelshipping.WeighingStation;
- 
-
-
 /**
  * The EventQueue class manages an ArrayList of all scheduled Events.
  */
