@@ -5,12 +5,10 @@
  * which is available at https://www.eclipse.org/legal/epl-2.0/
  *
  * see LICENSE
- * 
+ *
  * @author Christian Minich
  */
 package dev.despg.examples.gravelshipping;
-
-import java.util.Map;
 
 import dev.despg.core.Event;
 import dev.despg.core.EventQueue;
@@ -18,16 +16,15 @@ import dev.despg.core.Randomizer;
 import dev.despg.core.SimulationObject;
 import dev.despg.core.SimulationObjects;
 
-public class Shipment extends SimulationObject{
-
+public class Shipment extends SimulationObject
+{
 	private String name;
 	private Truck truckCurrentlyLoaded;
 	private static EventQueue eventQueue;
 	private static Randomizer unloadingTime;
-	private static Long drivingToLoadingDock;
-	
+
 	private static ShipmentsToLoadingDocks stld = ShipmentsToLoadingDocks.getInstance();
-	
+
 	/**
 	 * Constructor for new Shipments, injects its dependency to SimulationObjects
 	 * and creates the required randomizer instances.
@@ -49,10 +46,9 @@ public class Shipment extends SimulationObject{
 		unloadingTime.addProbInt(0.3, 60);
 		unloadingTime.addProbInt(0.8, 120);
 		unloadingTime.addProbInt(1.0, 180);
-		
+
 	}
-	
-	
+
 	@Override
 	public final String toString()
 	{
@@ -61,33 +57,11 @@ public class Shipment extends SimulationObject{
 			toString += " " + "shipping with: " + truckCurrentlyLoaded;
 		return toString;
 	}
-	
+
 	/**
-	 * Calculates the Time it takes to drive from this Shipment instance 
+	 * Calculates the Time it takes to drive from this Shipment instance
 	 * to the closest {@link LoadingDock} instance.
-	 * 
-	 * @return long - Time to closest {@link LoadingDock} in Minutes.
-	 */
-//	public long ClosestLoadingDock() {
-//		long currentSmallestDistance = 0;
-//		long currentDistance = 0;
-//		for(Map.Entry<Shipment, LoadingDock> set :
-//			stld.entrySet())
-//		{
-//			System.out.println(set.getKey());
-//			currentDistance = Routing.customizableRouting(this.latitude, this.longitude, set.getValue().getLatitude(), set.getValue().getLongitude());
-//			if( currentDistance < currentSmallestDistance) {
-//				currentSmallestDistance = currentDistance;
-//				
-//			}
-//			
-//			/*System.out.println(set.getKey() + " = "
-//                    + set.getValue());*/
-//		}
-//		return currentSmallestDistance;
-//	}
-	
-	/**
+	 *
 	 * Gets called every timeStep.
 	 *
 	 * If it is not currently occupied ({@link #truckCurrentlyLoaded} == null) and
@@ -108,8 +82,9 @@ public class Shipment extends SimulationObject{
 	 *         could get assigned
 	 */
 	@Override
-	public boolean simulate(long timeStep) {
-		
+	public boolean simulate(long timeStep)
+	{
+
 		if (truckCurrentlyLoaded == null && GravelShipping.getGravelToShip() > 0)
 		{
 			Event event = eventQueue.getNextEvent(timeStep, true, GravelLoadingEventTypes.Unloading, this.getClass(), null);
@@ -120,7 +95,7 @@ public class Shipment extends SimulationObject{
 
 				truckCurrentlyLoaded = (Truck) event.getObjectAttached();
 				truckCurrentlyLoaded.unload();
-				
+
 				eventQueue.add(new Event(timeStep + truckCurrentlyLoaded.addUtilization(unloadingTime.nextInt()),
 						GravelLoadingEventTypes.UnloadingDone, truckCurrentlyLoaded, null, this));
 
@@ -135,19 +110,16 @@ public class Shipment extends SimulationObject{
 					&& event.getObjectAttached().getClass() == Truck.class)
 			{
 				eventQueue.remove(event);
-				
+
 				LoadingDockWithDistance drivingToLoadingDock = stld.get(this);
 
-				//drivingToLoadingDock = this.ClosestLoadingDock();
-				//drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, ld.getLatitude(), ld.getLongitude());
-				//drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, 48.77585, 9.18293);
-				
 				eventQueue.add(new Event(
 						timeStep + event.getObjectAttached().addUtilization(drivingToLoadingDock.getDrivingTime()),
-						GravelLoadingEventTypes.Loading, truckCurrentlyLoaded, LoadingDock.class, drivingToLoadingDock.getloadingDock()));
+						GravelLoadingEventTypes.Loading, truckCurrentlyLoaded, LoadingDock.class,
+						drivingToLoadingDock.getloadingDock()));
 
 				truckCurrentlyLoaded = null;
-				utilStop(timeStep);		
+				utilStop(timeStep);
 				return true;
 			}
 		}

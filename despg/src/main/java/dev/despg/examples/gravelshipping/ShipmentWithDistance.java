@@ -1,20 +1,32 @@
 package dev.despg.examples.gravelshipping;
 
-public class ShipmentWithDistance {
+public class ShipmentWithDistance
+{
 
 	private Shipment shipment = null;
 	private Long drivingTime =  null;
-	
-	public ShipmentWithDistance(Shipment shipment, Long drivingTime) {
+
+	public ShipmentWithDistance(Shipment shipment, Long drivingTime)
+	{
 		this.shipment = shipment;
 		this.drivingTime = drivingTime;
 	}
 
-	public Shipment getShipment() {
+	/**
+	 *
+	 * @return {@link Shipment}
+	 */
+	public Shipment getShipment()
+	{
 		return shipment;
 	}
 
-	public Long getDrivingTime() {
+	/**
+	 *
+	 * @return long
+	 */
+	public Long getDrivingTime()
+	{
 		return drivingTime;
 	}
 

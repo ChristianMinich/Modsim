@@ -9,8 +9,6 @@
  */
 package dev.despg.examples.gravelshipping;
 
-import java.util.Map;
-
 import dev.despg.core.Event;
 import dev.despg.core.EventQueue;
 import dev.despg.core.Randomizer;
@@ -25,10 +23,8 @@ public final class WeighingStation extends SimulationObject
 	private String name;
 	private Truck truckInWeighingStation;
 
-	private static Long drivingToCustomer;
 	private static EventQueue eventQueue;
 	private static Randomizer timeToRemoveGravel;
-	
 	private static WeighingStationsToShipments wsts = WeighingStationsToShipments.getInstance();
 
 
@@ -43,10 +39,9 @@ public final class WeighingStation extends SimulationObject
 	public WeighingStation(String name, Double latitude, Double longitude)
 	{
 		this.name = name;
-		
 		this.latitude = latitude;
 		this.longitude = longitude;
-		
+
 		timeToRemoveGravel = new Randomizer();
 		timeToRemoveGravel.addProbInt(0.3, 60);
 		timeToRemoveGravel.addProbInt(0.8, 120);
@@ -65,34 +60,7 @@ public final class WeighingStation extends SimulationObject
 			toString += " " + "loading: " + truckInWeighingStation;
 		return toString;
 	}
-	
-	/**
-	 * Calculates the Time it takes to drive from this Weighing Station instance 
-	 * to the closest {@link Shipment} instance.
-	 * @return long - Time to closest {@link Shipment} in Minutes.
-	 */
-//	public long ClosestShipment() {
-//		long currentSmallestDistance = 0;
-//		long currentDistance = 0;
-//		//Shipment currShipment = null;
-//		for(Map.Entry<WeighingStation, Shipment> set :
-//			wsts.entrySet())
-//		{
-//			
-//			currentDistance = Routing.customizableRouting(this.latitude, this.longitude, set.getValue().getLatitude(), set.getValue().getLongitude());
-//			
-//			if( currentDistance < currentSmallestDistance) {
-//				currentSmallestDistance = currentDistance;
-//				//currShipment = set.getValue();
-//				
-//			}
-//			
-//			/*System.out.println(set.getKey() + " = "
-//                    + set.getValue());*/
-//		}
-//		return currentSmallestDistance;
-//	}
-	
+
 	/**
 	 * Gets called every timeStep
 	 *
@@ -114,20 +82,21 @@ public final class WeighingStation extends SimulationObject
 	 * @return true if an assignable event got found and handled, false if no event
 	 *         could get assigned
 	 */
+
 	@Override
 	public boolean simulate(long timeStep)
-	{		
+	{
 		Event event = eventQueue.getNextEvent(timeStep, true, GravelLoadingEventTypes.Weighing, this.getClass(), null);
-		
+
 		if (truckInWeighingStation == null && event != null && event.getObjectAttached() != null
 				&& event.getObjectAttached().getClass() == Truck.class)
 		{
 			eventQueue.remove(event);
 			truckInWeighingStation = (Truck) event.getObjectAttached();
-			
+
 			eventQueue.add(new Event(timeStep + truckInWeighingStation.addUtilization(TIME_TO_WEIGH_TRUCK),
 					GravelLoadingEventTypes.WeighingDone, truckInWeighingStation, null, this));
-			
+
 			utilStart(timeStep);
 			return true;
 		}
@@ -138,9 +107,7 @@ public final class WeighingStation extends SimulationObject
 			eventQueue.remove(event);
 			final Integer truckToWeighLoad = truckInWeighingStation.getLoad();
 			long driveToLoadingStation = 0;
-			
-			//drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, this.ClosestShipment().getLatitude(), this.ClosestShipment().getLongitude());
-			//drivingToCustomer = this.ClosestShipment();
+
 			ShipmentWithDistance drivingToShipment = wsts.get(this);
 
 			if (truckToWeighLoad != null && truckToWeighLoad > MAXLOAD)
@@ -148,10 +115,7 @@ public final class WeighingStation extends SimulationObject
 				GravelShipping.setGravelToShip(GravelShipping.getGravelToShip() + truckToWeighLoad);
 				GravelShipping.increaseUnsuccessfulLoadingSizes(truckToWeighLoad);
 				GravelShipping.increaseUnsuccessfulLoadings();
-				
-				//drivingToCustomer = ClosestShipment();
-				//drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, sp.getLatitude(), sp.getLongitude());
-				//drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, 52.37589, 9.73201);
+
 				driveToLoadingStation = truckInWeighingStation.addUtilization(timeToRemoveGravel.nextInt());
 			}
 			else
@@ -159,13 +123,10 @@ public final class WeighingStation extends SimulationObject
 				GravelShipping.increaseGravelShipped(truckToWeighLoad);
 				GravelShipping.increaseSuccessfulLoadingSizes(truckToWeighLoad);
 				GravelShipping.increaseSuccessfulLoadings();
-				
-				//drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, sp.getLatitude(), sp.getLongitude());
-				//drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, 52.37589, 9.73201);
-				//driveToLoadingStation = truckInWeighingStation.addUtilization(drivingToCustomer);
+
 				driveToLoadingStation = truckInWeighingStation.addUtilization(drivingToShipment.getDrivingTime());
 			}
-			
+
 			eventQueue.add(new Event(timeStep + driveToLoadingStation, GravelLoadingEventTypes.Unloading,
 					truckInWeighingStation, Shipment.class, drivingToShipment.getShipment()));
 

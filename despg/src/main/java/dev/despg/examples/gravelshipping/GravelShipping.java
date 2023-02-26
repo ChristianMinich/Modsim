@@ -10,14 +10,12 @@
 package dev.despg.examples.gravelshipping;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import dev.despg.core.Event;
 import dev.despg.core.EventQueue;
 import dev.despg.core.Simulation;
-import dev.despg.core.SimulationObject;
 import dev.despg.core.Time;
 
 public class GravelShipping extends Simulation
@@ -41,18 +39,16 @@ public class GravelShipping extends Simulation
 	private static final int NUM_LOADING_DOCKS = 4;
 	private static final int NUM_WEIGHING_STATIONS = 4;
 	private static final int NUM_SHIPMENTS = 4;
-	
-	private static ArrayList<Location> LOADING_DOCK_LOCATION = Reader.loadCoordinates(pathLoadingdocks);
-	private static ArrayList<Location> WEIGHING_LOCATION = Reader.loadCoordinates(pathWeighingstation);
-	private static ArrayList<Location> DESTINATION_LOCATION = Reader.loadCoordinates(pathDestinations);
-	
+
+	private static final ArrayList<Location> LOADING_DOCK_LOCATION = Reader.loadCoordinates(pathLoadingdocks);
+	private static final ArrayList<Location> WEIGHING_LOCATION = Reader.loadCoordinates(pathWeighingstation);
+	private static final ArrayList<Location> DESTINATION_LOCATION = Reader.loadCoordinates(pathDestinations);
+
 	private static LoadingDocksToWeighingStations ldtws = LoadingDocksToWeighingStations.getInstance();
 	private static WeighingStationsToShipments wsts = WeighingStationsToShipments.getInstance();
 	private static ShipmentsToLoadingDocks stld = ShipmentsToLoadingDocks.getInstance();
-	
-	static {
-		
-	}
+
+
 	/**
 	 * Defines the setup of simulation objects and starting events before executing
 	 * the simulation. Prints utilization statistics afterwards
@@ -65,92 +61,85 @@ public class GravelShipping extends Simulation
 		ArrayList<LoadingDock> loadingDocks = new ArrayList<LoadingDock>();
 		ArrayList<WeighingStation> weighingStations = new ArrayList<WeighingStation>();
 		ArrayList<Shipment> shipments = new ArrayList<Shipment>();
-		
+
 		System.out.println(eventqueue);
 
 		for (int i = 0; i < NUM_TRUCKS; i++)
 			eventqueue.add(new Event(0L, GravelLoadingEventTypes.Loading, new Truck("T" + i), LoadingDock.class, null));
 
-		for (int i = 0; i < NUM_LOADING_DOCKS; i++) 
-			loadingDocks.add(new LoadingDock("LD " + LOADING_DOCK_LOCATION.get(i).getName(), LOADING_DOCK_LOCATION.get(i).getLatitude(), LOADING_DOCK_LOCATION.get(i).getLongitude()));
+		for (int i = 0; i < NUM_LOADING_DOCKS; i++)
+		{
+			loadingDocks.add(new LoadingDock("LD " + LOADING_DOCK_LOCATION.get(i).getName(),
+			LOADING_DOCK_LOCATION.get(i).getLatitude(), LOADING_DOCK_LOCATION.get(i).getLongitude()));
+		}
 
 		for (int i = 0; i < NUM_WEIGHING_STATIONS; i++)
-			weighingStations.add(new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(), WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude()));
-			
-		
-		for (LoadingDock loadingDock : loadingDocks) 
 		{
-			
+			weighingStations.add(new WeighingStation("WS " + WEIGHING_LOCATION.get(i).getName(),
+			WEIGHING_LOCATION.get(i).getLatitude(), WEIGHING_LOCATION.get(i).getLongitude()));
+		}
+
+		for (LoadingDock loadingDock : loadingDocks)
+		{
+
 			Long closestDrivingTimeToWeighingStation = Long.MAX_VALUE;
 			WeighingStation closestWeighingStation = null;
-			
-			for (WeighingStation weighingStation : weighingStations) 
+
+			for (WeighingStation weighingStation : weighingStations)
 			{
-				long drivingTimeToWeighingStation = Routing.customizableRouting(loadingDock.getLatitude(), loadingDock.getLongitude(), weighingStation.getLatitude(), weighingStation.getLongitude());
-//				long drivingTimeToWeighingStation = Routing.getTimeInMs(loadingDock.getLatitude(), loadingDock.getLongitude(), weighingStation.getLatitude(), weighingStation.getLongitude());
-		
-				if(drivingTimeToWeighingStation < closestDrivingTimeToWeighingStation) 
+				long drivingTimeToWeighingStation = Routing.customizableRouting(loadingDock.getLatitude(),
+					loadingDock.getLongitude(), weighingStation.getLatitude(), weighingStation.getLongitude());
+				if (drivingTimeToWeighingStation < closestDrivingTimeToWeighingStation)
 				{
 					closestDrivingTimeToWeighingStation = drivingTimeToWeighingStation;
 					closestWeighingStation = weighingStation;
 				}
 			}
-			
+
 			ldtws.put(loadingDock, new WeighingStationWithDistance(closestWeighingStation, closestDrivingTimeToWeighingStation));
 		}
-		
 
-		/*TODO
-         * 
-         * 1. Alle Ladedocks abfragen (eigene Speicehrstruktur mit Ladedocks als singleton OR über alle SimObjekte filtern)
-         * 2. Distanzen zwischen dem LoadingDock und allen Weighingstation 
-         * 3. günstigste Distanz zwischen dem Ladedock und der Weighstaion speichern (Loadingdocktoweighingstation)
-         * 4. Algorithmus ändern (anpassen nächste weighingstation nehmen
-         * 5. 
-         * 
-         * */
 		for (int i = 0; i < NUM_SHIPMENTS; i++)
-			shipments.add(new Shipment("SP " + DESTINATION_LOCATION.get(i).getName(), DESTINATION_LOCATION.get(i).getLatitude(), DESTINATION_LOCATION.get(i).getLongitude()));
-		
-		for (WeighingStation weighingStation : weighingStations) 
+			shipments.add(new Shipment("SP " + DESTINATION_LOCATION.get(i).getName(), DESTINATION_LOCATION.get(i).getLatitude(),
+					DESTINATION_LOCATION.get(i).getLongitude()));
+
+		for (WeighingStation weighingStation : weighingStations)
 		{
 			Long closestDrivingTimeToShipment = Long.MAX_VALUE;
 			Shipment closestShipment = null;
-			
-			for(Shipment shipment : shipments)
-			{
-				long drivingTimeToShipment = Routing.customizableRouting(weighingStation.getLatitude(), weighingStation.getLongitude(), shipment.getLatitude(), shipment.getLongitude());
-//				long drivingTimeToShipment = Routing.getTimeInMs(weighingStation.getLatitude(), weighingStation.getLongitude(), shipment.getLatitude(),  shipment.getLongitude());
 
-				
-				if(drivingTimeToShipment < closestDrivingTimeToShipment)
+			for (Shipment shipment : shipments)
+			{
+				long drivingTimeToShipment = Routing.customizableRouting(weighingStation.getLatitude(),
+						weighingStation.getLongitude(), shipment.getLatitude(), shipment.getLongitude());
+
+				if (drivingTimeToShipment < closestDrivingTimeToShipment)
 				{
 					closestDrivingTimeToShipment = drivingTimeToShipment;
 					closestShipment = shipment;
 				}
 			}
-			
+
 			wsts.put(weighingStation, new ShipmentWithDistance(closestShipment, closestDrivingTimeToShipment));
 		}
-		
+
 		for (Shipment shipment : shipments)
 		{
 			Long closestDrivingTimeToLoadingDock = Long.MAX_VALUE;
 			LoadingDock closestLoadingDock = null;
-			
+
 			for (LoadingDock loadingDock : loadingDocks)
 			{
-				long drivingTimeToLoadingDock = Routing.customizableRouting(shipment.getLatitude(), shipment.getLongitude(), loadingDock.getLatitude(), loadingDock.getLongitude());
-//				long drivingTimeToLoadingDock = Routing.getTimeInMs(shipment.getLatitude(), shipment.getLongitude(), loadingDock.getLatitude(),  loadingDock.getLongitude());
+				long drivingTimeToLoadingDock = Routing.customizableRouting(shipment.getLatitude(), shipment.getLongitude(),
+						loadingDock.getLatitude(), loadingDock.getLongitude());
 
-				
 				if (drivingTimeToLoadingDock < closestDrivingTimeToLoadingDock)
 				{
 					closestDrivingTimeToLoadingDock = drivingTimeToLoadingDock;
 					closestLoadingDock = loadingDock;
 				}
 			}
-			
+
 			stld.put(shipment, new LoadingDockWithDistance(closestLoadingDock, closestDrivingTimeToLoadingDock));
 		}
 
@@ -170,7 +159,6 @@ public class GravelShipping extends Simulation
 				String.format("Unsuccessfull loadings\t = %d(%.2f%%), mean size %.2ft", unsuccessfulLoadings,
 						(double) unsuccessfulLoadings / (successfulLoadings + unsuccessfulLoadings) * 100,
 						(double) unsuccessfulLoadingSizes / unsuccessfulLoadings));
-		
 	}
 
 	/**
@@ -189,7 +177,8 @@ public class GravelShipping extends Simulation
 				(double) gravelShipped / gravelToShippedFinal * 100, gravelToShip);
 
 		logger.log(Level.INFO, time + " " + shipped + "\n " + eventQueue
-				+ " #Trucks Loading Queue: " + numberOfTrucksLoadingQueue + ", # Trucks Weighing Queue: " + numberOfTrucksWeighingQueue + " ," + numberOfTrucksUnloadingQueue);
+				+ " #Trucks Loading Queue: " + numberOfTrucksLoadingQueue + ", # Trucks Weighing Queue: "
+				+ numberOfTrucksWeighingQueue + " ," + numberOfTrucksUnloadingQueue);
 	}
 
 	public static Integer getGravelToShip()

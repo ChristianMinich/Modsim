@@ -9,8 +9,6 @@
  */
 package dev.despg.examples.gravelshipping;
 
-import java.util.Map;
-
 import dev.despg.core.Event;
 import dev.despg.core.EventQueue;
 import dev.despg.core.Randomizer;
@@ -55,7 +53,7 @@ public class LoadingDock extends SimulationObject
 		loadingTime.addProbInt(0.3, 60);
 		loadingTime.addProbInt(0.8, 120);
 		loadingTime.addProbInt(1.0, 180);
-		
+
 		dockFailureRepairTime = new Randomizer();
 		dockFailureRepairTime.addProbInt(0.8, 0);
 		dockFailureRepairTime.addProbInt(0.98, 1440);
@@ -70,7 +68,7 @@ public class LoadingDock extends SimulationObject
 			toString += " " + "loading: " + truckCurrentlyLoaded;
 		return toString;
 	}
-	
+
 	/**
 	 * Gets called every timeStep.
 	 *
@@ -94,9 +92,11 @@ public class LoadingDock extends SimulationObject
 	@Override
 	public boolean simulate(long timeStep)
 	{
-		if (dockFailed){
+		if (dockFailed)
+		{
 			Event event = eventQueue.getNextEvent(timeStep, true, GravelLoadingEventTypes.DockRepaired, null, this);
-			if (event != null){
+			if (event != null)
+			{
 				eventQueue.remove(event);
 				dockFailed = false;
 				return true;
@@ -129,26 +129,27 @@ public class LoadingDock extends SimulationObject
 					&& event.getObjectAttached().getClass() == Truck.class)
 			{
 				eventQueue.remove(event);
-				
+
 				WeighingStationWithDistance drivingToWeighingStation = ldtws.get(this);
-				
+
 				//drivingToWeighingStation = Routing.customizableRouting(this.latitude, this.longitude, ws.getLatitude(), ws.getLongitude());
 				//drivingToWeighingStation = Routing.customizableRouting(this.latitude, this.longitude, 49.87283, 8.65119);
 				eventQueue.add(new Event(
 						timeStep + event.getObjectAttached().addUtilization(drivingToWeighingStation.getDrivingTime()),
-						GravelLoadingEventTypes.Weighing, truckCurrentlyLoaded, WeighingStation.class, drivingToWeighingStation.getWeighingStation()));
-				
+						GravelLoadingEventTypes.Weighing, truckCurrentlyLoaded, WeighingStation.class,
+						drivingToWeighingStation.getWeighingStation()));
+
 				truckCurrentlyLoaded = null;
 				utilStop(timeStep);
-				
-				int repairTime = dockFailureRepairTime.nextInt(); 
-				if(repairTime > 0) 
+
+				int repairTime = dockFailureRepairTime.nextInt();
+				if (repairTime > 0)
 				{
 					dockFailed = true;
 					eventQueue.add(new Event(timeStep + repairTime, GravelLoadingEventTypes.DockRepaired,
 							null, null, this));
-				} 
-				
+				}
+
 				return true;
 			}
 		}
