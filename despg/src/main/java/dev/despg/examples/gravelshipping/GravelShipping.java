@@ -37,9 +37,9 @@ public class GravelShipping extends Simulation
 	private static Integer unsuccessfulLoadings = 0;
 	private static Integer unsuccessfulLoadingSizes = 0;
 
-	private static final int NUM_TRUCKS = 20;
-	private static final int NUM_LOADING_DOCKS = 1;
-	private static final int NUM_WEIGHING_STATIONS = 2;
+	private static final int NUM_TRUCKS = 10;
+	private static final int NUM_LOADING_DOCKS = 4;
+	private static final int NUM_WEIGHING_STATIONS = 4;
 	private static final int NUM_SHIPMENTS = 4;
 	
 	private static ArrayList<Location> LOADING_DOCK_LOCATION = Reader.loadCoordinates(pathLoadingdocks);
@@ -47,6 +47,8 @@ public class GravelShipping extends Simulation
 	private static ArrayList<Location> DESTINATION_LOCATION = Reader.loadCoordinates(pathDestinations);
 	
 	private static LoadingDocksToWeighingStations ldtws = LoadingDocksToWeighingStations.getInstance();
+	private static WeighingStationsToShipments wsts = WeighingStationsToShipments.getInstance();
+	private static ShipmentsToLoadingDocks stld = ShipmentsToLoadingDocks.getInstance();
 	
 	static {
 		
@@ -62,6 +64,7 @@ public class GravelShipping extends Simulation
 		EventQueue eventqueue = EventQueue.getInstance();
 		ArrayList<LoadingDock> loadingDocks = new ArrayList<LoadingDock>();
 		ArrayList<WeighingStation> weighingStations = new ArrayList<WeighingStation>();
+		ArrayList<Shipment> shipments = new ArrayList<Shipment>();
 		
 		System.out.println(eventqueue);
 
@@ -84,6 +87,7 @@ public class GravelShipping extends Simulation
 			for (WeighingStation weighingStation : weighingStations) 
 			{
 				long drivingTimeToWeighingStation = Routing.customizableRouting(loadingDock.getLatitude(), loadingDock.getLongitude(), weighingStation.getLatitude(), weighingStation.getLongitude());
+//				long drivingTimeToWeighingStation = Routing.getTimeInMs(loadingDock.getLatitude(), loadingDock.getLongitude(), weighingStation.getLatitude(), weighingStation.getLongitude());
 		
 				if(drivingTimeToWeighingStation < closestDrivingTimeToWeighingStation) 
 				{
@@ -106,7 +110,49 @@ public class GravelShipping extends Simulation
          * 
          * */
 		for (int i = 0; i < NUM_SHIPMENTS; i++)
-			new Shipment("SP " + DESTINATION_LOCATION.get(i).getName(), DESTINATION_LOCATION.get(i).getLatitude(), DESTINATION_LOCATION.get(i).getLongitude());
+			shipments.add(new Shipment("SP " + DESTINATION_LOCATION.get(i).getName(), DESTINATION_LOCATION.get(i).getLatitude(), DESTINATION_LOCATION.get(i).getLongitude()));
+		
+		for (WeighingStation weighingStation : weighingStations) 
+		{
+			Long closestDrivingTimeToShipment = Long.MAX_VALUE;
+			Shipment closestShipment = null;
+			
+			for(Shipment shipment : shipments)
+			{
+				long drivingTimeToShipment = Routing.customizableRouting(weighingStation.getLatitude(), weighingStation.getLongitude(), shipment.getLatitude(), shipment.getLongitude());
+//				long drivingTimeToShipment = Routing.getTimeInMs(weighingStation.getLatitude(), weighingStation.getLongitude(), shipment.getLatitude(),  shipment.getLongitude());
+
+				
+				if(drivingTimeToShipment < closestDrivingTimeToShipment)
+				{
+					closestDrivingTimeToShipment = drivingTimeToShipment;
+					closestShipment = shipment;
+				}
+			}
+			
+			wsts.put(weighingStation, new ShipmentWithDistance(closestShipment, closestDrivingTimeToShipment));
+		}
+		
+		for (Shipment shipment : shipments)
+		{
+			Long closestDrivingTimeToLoadingDock = Long.MAX_VALUE;
+			LoadingDock closestLoadingDock = null;
+			
+			for (LoadingDock loadingDock : loadingDocks)
+			{
+				long drivingTimeToLoadingDock = Routing.customizableRouting(shipment.getLatitude(), shipment.getLongitude(), loadingDock.getLatitude(), loadingDock.getLongitude());
+//				long drivingTimeToLoadingDock = Routing.getTimeInMs(shipment.getLatitude(), shipment.getLongitude(), loadingDock.getLatitude(),  loadingDock.getLongitude());
+
+				
+				if (drivingTimeToLoadingDock < closestDrivingTimeToLoadingDock)
+				{
+					closestDrivingTimeToLoadingDock = drivingTimeToLoadingDock;
+					closestLoadingDock = loadingDock;
+				}
+			}
+			
+			stld.put(shipment, new LoadingDockWithDistance(closestLoadingDock, closestDrivingTimeToLoadingDock));
+		}
 
 		GravelShipping gs = new GravelShipping();
 		long timeStep = gs.simulate();

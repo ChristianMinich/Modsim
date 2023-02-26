@@ -68,24 +68,24 @@ public class Shipment extends SimulationObject{
 	 * 
 	 * @return long - Time to closest {@link LoadingDock} in Minutes.
 	 */
-	public long ClosestLoadingDock() {
-		long currentSmallestDistance = 0;
-		long currentDistance = 0;
-		for(Map.Entry<Shipment, LoadingDock> set :
-			stld.entrySet())
-		{
-			System.out.println(set.getKey());
-			currentDistance = Routing.customizableRouting(this.latitude, this.longitude, set.getValue().getLatitude(), set.getValue().getLongitude());
-			if( currentDistance < currentSmallestDistance) {
-				currentSmallestDistance = currentDistance;
-				
-			}
-			
-			/*System.out.println(set.getKey() + " = "
-                    + set.getValue());*/
-		}
-		return currentSmallestDistance;
-	}
+//	public long ClosestLoadingDock() {
+//		long currentSmallestDistance = 0;
+//		long currentDistance = 0;
+//		for(Map.Entry<Shipment, LoadingDock> set :
+//			stld.entrySet())
+//		{
+//			System.out.println(set.getKey());
+//			currentDistance = Routing.customizableRouting(this.latitude, this.longitude, set.getValue().getLatitude(), set.getValue().getLongitude());
+//			if( currentDistance < currentSmallestDistance) {
+//				currentSmallestDistance = currentDistance;
+//				
+//			}
+//			
+//			/*System.out.println(set.getKey() + " = "
+//                    + set.getValue());*/
+//		}
+//		return currentSmallestDistance;
+//	}
 	
 	/**
 	 * Gets called every timeStep.
@@ -135,13 +135,16 @@ public class Shipment extends SimulationObject{
 					&& event.getObjectAttached().getClass() == Truck.class)
 			{
 				eventQueue.remove(event);
+				
+				LoadingDockWithDistance drivingToLoadingDock = stld.get(this);
 
-				drivingToLoadingDock = this.ClosestLoadingDock();
+				//drivingToLoadingDock = this.ClosestLoadingDock();
 				//drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, ld.getLatitude(), ld.getLongitude());
 				//drivingToLoadingDock = Routing.customizableRouting(this.latitude, this.longitude, 48.77585, 9.18293);
+				
 				eventQueue.add(new Event(
-						timeStep + event.getObjectAttached().addUtilization(drivingToLoadingDock),
-						GravelLoadingEventTypes.Loading, truckCurrentlyLoaded, LoadingDock.class, null));
+						timeStep + event.getObjectAttached().addUtilization(drivingToLoadingDock.getDrivingTime()),
+						GravelLoadingEventTypes.Loading, truckCurrentlyLoaded, LoadingDock.class, drivingToLoadingDock.getloadingDock()));
 
 				truckCurrentlyLoaded = null;
 				utilStop(timeStep);		

@@ -71,27 +71,27 @@ public final class WeighingStation extends SimulationObject
 	 * to the closest {@link Shipment} instance.
 	 * @return long - Time to closest {@link Shipment} in Minutes.
 	 */
-	public long ClosestShipment() {
-		long currentSmallestDistance = 0;
-		long currentDistance = 0;
-		//Shipment currShipment = null;
-		for(Map.Entry<WeighingStation, Shipment> set :
-			wsts.entrySet())
-		{
-			
-			currentDistance = Routing.customizableRouting(this.latitude, this.longitude, set.getValue().getLatitude(), set.getValue().getLongitude());
-			
-			if( currentDistance < currentSmallestDistance) {
-				currentSmallestDistance = currentDistance;
-				//currShipment = set.getValue();
-				
-			}
-			
-			/*System.out.println(set.getKey() + " = "
-                    + set.getValue());*/
-		}
-		return currentSmallestDistance;
-	}
+//	public long ClosestShipment() {
+//		long currentSmallestDistance = 0;
+//		long currentDistance = 0;
+//		//Shipment currShipment = null;
+//		for(Map.Entry<WeighingStation, Shipment> set :
+//			wsts.entrySet())
+//		{
+//			
+//			currentDistance = Routing.customizableRouting(this.latitude, this.longitude, set.getValue().getLatitude(), set.getValue().getLongitude());
+//			
+//			if( currentDistance < currentSmallestDistance) {
+//				currentSmallestDistance = currentDistance;
+//				//currShipment = set.getValue();
+//				
+//			}
+//			
+//			/*System.out.println(set.getKey() + " = "
+//                    + set.getValue());*/
+//		}
+//		return currentSmallestDistance;
+//	}
 	
 	/**
 	 * Gets called every timeStep
@@ -116,15 +116,18 @@ public final class WeighingStation extends SimulationObject
 	 */
 	@Override
 	public boolean simulate(long timeStep)
-	{
+	{		
 		Event event = eventQueue.getNextEvent(timeStep, true, GravelLoadingEventTypes.Weighing, this.getClass(), null);
+		
 		if (truckInWeighingStation == null && event != null && event.getObjectAttached() != null
 				&& event.getObjectAttached().getClass() == Truck.class)
 		{
 			eventQueue.remove(event);
 			truckInWeighingStation = (Truck) event.getObjectAttached();
+			
 			eventQueue.add(new Event(timeStep + truckInWeighingStation.addUtilization(TIME_TO_WEIGH_TRUCK),
 					GravelLoadingEventTypes.WeighingDone, truckInWeighingStation, null, this));
+			
 			utilStart(timeStep);
 			return true;
 		}
@@ -134,10 +137,11 @@ public final class WeighingStation extends SimulationObject
 		{
 			eventQueue.remove(event);
 			final Integer truckToWeighLoad = truckInWeighingStation.getLoad();
-			long driveToLoadingStation;
+			long driveToLoadingStation = 0;
 			
 			//drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, this.ClosestShipment().getLatitude(), this.ClosestShipment().getLongitude());
-			drivingToCustomer = this.ClosestShipment();
+			//drivingToCustomer = this.ClosestShipment();
+			ShipmentWithDistance drivingToShipment = wsts.get(this);
 
 			if (truckToWeighLoad != null && truckToWeighLoad > MAXLOAD)
 			{
@@ -158,11 +162,12 @@ public final class WeighingStation extends SimulationObject
 				
 				//drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, sp.getLatitude(), sp.getLongitude());
 				//drivingToCustomer = Routing.customizableRouting(this.latitude, this.longitude, 52.37589, 9.73201);
-				driveToLoadingStation = truckInWeighingStation.addUtilization(drivingToCustomer);
+				//driveToLoadingStation = truckInWeighingStation.addUtilization(drivingToCustomer);
+				driveToLoadingStation = truckInWeighingStation.addUtilization(drivingToShipment.getDrivingTime());
 			}
 			
 			eventQueue.add(new Event(timeStep + driveToLoadingStation, GravelLoadingEventTypes.Unloading,
-					truckInWeighingStation, Shipment.class, null));
+					truckInWeighingStation, Shipment.class, drivingToShipment.getShipment()));
 
 			truckInWeighingStation.unload();
 			truckInWeighingStation = null;

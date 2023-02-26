@@ -131,12 +131,13 @@ public class LoadingDock extends SimulationObject
 				eventQueue.remove(event);
 				
 				WeighingStationWithDistance drivingToWeighingStation = ldtws.get(this);
+				
 				//drivingToWeighingStation = Routing.customizableRouting(this.latitude, this.longitude, ws.getLatitude(), ws.getLongitude());
 				//drivingToWeighingStation = Routing.customizableRouting(this.latitude, this.longitude, 49.87283, 8.65119);
 				eventQueue.add(new Event(
 						timeStep + event.getObjectAttached().addUtilization(drivingToWeighingStation.getDrivingTime()),
-						GravelLoadingEventTypes.Weighing, truckCurrentlyLoaded, null, drivingToWeighingStation.getWeighingStation()));
-
+						GravelLoadingEventTypes.Weighing, truckCurrentlyLoaded, WeighingStation.class, drivingToWeighingStation.getWeighingStation()));
+				
 				truckCurrentlyLoaded = null;
 				utilStop(timeStep);
 				
